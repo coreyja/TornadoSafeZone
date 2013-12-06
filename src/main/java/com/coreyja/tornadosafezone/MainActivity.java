@@ -1,18 +1,14 @@
 package com.coreyja.tornadosafezone;
 
 import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MainActivity extends Activity {
 
@@ -26,7 +22,10 @@ public class MainActivity extends Activity {
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 
         mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setCompassEnabled(true);
+
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(39.483333, -87.324444))
+                .title("Logan Library"));
 
     }
 
