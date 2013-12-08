@@ -12,4 +12,6 @@
     <string name="for_seniors">For Seniors</string>
     <string name="not_implemented">This activity not implemented yet! We are working on it.</string>
 
+    <string name="format_capacity">Capacity: %01d</string>
+
 </resources>

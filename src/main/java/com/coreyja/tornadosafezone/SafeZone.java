@@ -10,7 +10,6 @@ public class SafeZone {
 
     private LatLng position;
     private String title;
-    private String address, city, state;
     private String phone;
 
     /* The hours of the SafeZone. The hours are in 24 hour format. The minutes are just minutes. */
@@ -22,12 +21,10 @@ public class SafeZone {
     private String extra_info;
 
 
-    public SafeZone(LatLng position, String title, String address, String city, String state, String phone, int openHour, int openMinute, int closeHour, int closeMinute, int capacity, String extra_info) {
+    public SafeZone(LatLng position, String title, String phone, int openHour, int openMinute, int closeHour, int closeMinute, int capacity, String extra_info) {
         this.position = position;
         this.title = title;
-        this.address = address;
-        this.city = city;
-        this.state = state;
+
         this.phone = phone;
         this.openMinute = openMinute;
         this.openHour = openHour;
@@ -37,24 +34,20 @@ public class SafeZone {
         this.extra_info = extra_info;
     }
 
-    public SafeZone(LatLng position, String title, String address, String city, String state, String phone, int openHour, int openMinute, int closeHour, int closeMinute, int capacity) {
-        this(position, title, address, city, state, phone, openHour, openMinute, closeHour, closeMinute, capacity, "");
+    public SafeZone(LatLng position, String title, String phone, int openHour, int openMinute, int closeHour, int closeMinute, int capacity) {
+        this(position, title, phone, openHour, openMinute, closeHour, closeMinute, capacity, "");
     }
 
-    public SafeZone(LatLng position, String title, String address, String city, String state, String phone, int openHour, int openMinute, int closeHour, int closeMinute) {
-        this(position, title, address, city, state, phone, openHour, openMinute, closeHour, closeMinute, 0, "");
+    public SafeZone(LatLng position, String title, String phone, int openHour, int openMinute, int closeHour, int closeMinute) {
+        this(position, title, phone, openHour, openMinute, closeHour, closeMinute, 0, "");
     }
 
-    public SafeZone(LatLng position, String title, String address, String city, String state, String phone) {
-        this(position, title, address, city, state, phone, -1, 0, -1, 0, 0, "");
-    }
-
-    public SafeZone(LatLng position, String title, String address, String city, String state) {
-        this(position, title, address, city, state, "", -1, 0, -1, 0, 0, "");
+    public SafeZone(LatLng position, String title, String phone) {
+        this(position, title, phone, -1, 0, -1, 0, 0, "");
     }
 
     public SafeZone(LatLng position, String title) {
-        this(position, title, "", "", "", "", -1, 0, -1, 0, 0, "");
+        this(position, title, "", -1, 0, -1, 0, 0, "");
     }
 
 
@@ -73,30 +66,6 @@ public class SafeZone {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
     }
 
     public String getPhone() {
@@ -157,8 +126,42 @@ public class SafeZone {
 
     // Create and return a new MarkerOptions object using the position of this SafeZone
     public MarkerOptions generateMarkerOptions() {
-        return new MarkerOptions().position(this.position);
+        return new MarkerOptions().position(this.position).title(this.title);
     }
+
+    /* The following return true if the property specified exists for this SafeZone */
+    public boolean hasHours() {
+        return !( this.openHour == -1 || this.closeHour == -1);
+    }
+    public boolean hasCapacity() {
+        return capacity != 0;
+    }
+    public boolean hasPhone() {
+        return this.phone != "";
+    }
+    public boolean hasExtraInfo() {
+        return this.extra_info != "";
+    }
+
+    // Return a formatted string of the hours of this SafeZone
+    public String getFormattedHours() {
+        String s = "";
+
+        int oh = (openHour > 12) ? openHour-12 : openHour;
+        int ch = (closeHour > 12) ? closeHour-12 : closeHour;
+
+        s += oh;
+        s += ":" + String.format("%02d", openMinute);
+        s += ((openHour > 12) ? " PM " : " AM ");
+
+        s += "to ";
+        s += ch + ":" + String.format("%02d", closeMinute);
+        s += ((closeHour > 12) ? " PM " : " AM ");
+
+        return s;
+
+    }
+
 
 
 }
