@@ -44,14 +44,10 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         // For now just create some dummy SafeZones to add.
 
         safeZones.clear();
-        SafeZone s = new SafeZone(new LatLng(39.483333, -87.324444), "Logan Library", "(303) 555-1234");
-        s.setOpenHour(8);
-        s.setOpenMinute(0);
-        s.setCloseHour(20);
-        s.setCloseMinute(0);
-        s.setCapacity(200);
-        s.setExtra_info("Go to the 'Learning Center' in case of Tornado");
-        safeZones.add(s);
+
+        safeZones.add(new SafeZone(new LatLng(39.483333, -87.324444), "Logan Library", "(303) 555-1234", 8, 0, 20, 0, 200, "Go to the 'Learning Center' in case of Tornado"));
+
+        safeZones.add(new SafeZone(new LatLng(39.48261667, -87.3295), "White Chapel"));
 
     }
 
@@ -120,28 +116,28 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         if (sz.hasHours()){
             ((TextView)v.findViewById(R.id.info_hours)).setText(sz.getFormattedHours());
         } else {
-            v.findViewById(R.id.info_hours).setVisibility(View.INVISIBLE);
+            v.findViewById(R.id.info_hours).setVisibility(View.GONE);
         }
 
         // Set the capacity if it exists. And hide the TextView if it doesn't
         if (sz.hasCapacity()){
             ((TextView)v.findViewById(R.id.info_capacity)).setText(getString(R.string.format_capacity, sz.getCapacity()));
         } else {
-            v.findViewById(R.id.info_capacity).setVisibility(View.INVISIBLE);
+            v.findViewById(R.id.info_capacity).setVisibility(View.GONE);
         }
 
         // Do the same as above for the phone number
         if (sz.hasPhone()){
             ((TextView)v.findViewById(R.id.info_phone)).setText(sz.getPhone());
         } else {
-            v.findViewById(R.id.info_phone).setVisibility(View.INVISIBLE);
+            v.findViewById(R.id.info_phone).setVisibility(View.GONE);
         }
 
         // And last but not least, extra info
         if (sz.hasExtraInfo()){
             ((TextView)v.findViewById(R.id.info_extrainfo)).setText(sz.getExtra_info());
         } else {
-            v.findViewById(R.id.info_extrainfo).setVisibility(View.INVISIBLE);
+            v.findViewById(R.id.info_extrainfo).setVisibility(View.GONE);
         }
 
         return v;
