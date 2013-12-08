@@ -13,11 +13,13 @@
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:text="@string/view_safe_zones"
         android:id="@+id/map_button"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:background="@color/main_yellow"
+        android:textSize="40sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,7 +27,7 @@
         android:layout_gravity="center_horizontal"
         android:orientation="horizontal"
 
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp" >
 
 
         <Button
@@ -34,14 +36,16 @@
             android:text="@string/for_kids"
             android:id="@+id/kids_button"
 
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@color/red" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/for_teens"
             android:id="@+id/teens_button"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@color/green" />
 
     </LinearLayout>
 
@@ -56,14 +60,16 @@
             android:layout_height="wrap_content"
             android:text="@string/for_adults"
             android:id="@+id/adults_button"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@color/blue" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/for_seniors"
             android:id="@+id/seniors_button"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@color/orange" />
     </LinearLayout>
 
 
