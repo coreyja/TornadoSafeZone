@@ -4,5 +4,11 @@
     <string name="app_name">TornadoSafeZone</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_launcher">LauncherActivity</string>
+    <string name="view_safe_zones">View Safe Zones</string>
+    <string name="for_kids">For Kids</string>
+    <string name="for_teens">For Teens</string>
+    <string name="for_adults">For Adults</string>
+    <string name="for_seniors">For Seniors</string>
 
 </resources>
