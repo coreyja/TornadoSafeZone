@@ -10,5 +10,6 @@
     <string name="for_teens">For Teens</string>
     <string name="for_adults">For Adults</string>
     <string name="for_seniors">For Seniors</string>
+    <string name="not_implemented">This activity not implemented yet! We are working on it.</string>
 
 </resources>

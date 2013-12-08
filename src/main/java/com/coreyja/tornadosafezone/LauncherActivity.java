@@ -3,6 +3,7 @@ package com.coreyja.tornadosafezone;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,13 +11,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.Button;
+import android.widget.Toast;
 
-public class LauncherActivity extends Activity {
+public class LauncherActivity extends Activity implements View.OnClickListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launcher);
+
+        // Set the OnClickListeners for all the buttons
+        ((Button)findViewById(R.id.map_button)).setOnClickListener(this);
+        ((Button)findViewById(R.id.kids_button)).setOnClickListener(this);
+        ((Button)findViewById(R.id.teens_button)).setOnClickListener(this);
+        ((Button)findViewById(R.id.adults_button)).setOnClickListener(this);
+        ((Button)findViewById(R.id.seniors_button)).setOnClickListener(this);
 
     }
 
@@ -42,5 +52,24 @@ public class LauncherActivity extends Activity {
     }
 
 
+    @Override
+    public void onClick(View view) {
+        Intent i = null;
 
+        // Add the other views to here when they are implemented
+        switch (view.getId()){
+            case R.id.map_button:
+                i = new Intent(this, MapActivity.class);
+                break;
+
+            default:
+                // Display a toast saying the activity requested isn't implemented yet
+                Toast.makeText(getApplicationContext(), getString(R.string.not_implemented),Toast.LENGTH_SHORT).show();
+        }
+
+        if (i != null){
+            startActivity(i);
+        }
+
+    }
 }
