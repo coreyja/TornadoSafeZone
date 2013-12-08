@@ -10,9 +10,13 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
 public class MapActivity extends Activity {
 
     private GoogleMap mMap;
+
+    private ArrayList<SafeZone> safeZones = new ArrayList<SafeZone>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,10 +27,27 @@ public class MapActivity extends Activity {
 
         mMap.setMyLocationEnabled(true);
 
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(39.483333, -87.324444))
-                .title("Logan Library"));
+        this.populateSafeZones();
 
+        this.refreshMarkers();
+
+    }
+
+    private void populateSafeZones() {
+        // In the future this may be removed when we add async for endpoints
+        // For now just create some dummy SafeZones to add.
+
+        safeZones.clear();
+        safeZones.add(new SafeZone(new LatLng(39.483333, -87.324444), "Logan Library"));
+
+    }
+
+    private void refreshMarkers() {
+        mMap.clear();
+
+        for (SafeZone s : safeZones){
+            mMap.addMarker(s.generateMarkerOptions());
+        }
     }
 
 

@@ -1,6 +1,7 @@
 package com.coreyja.tornadosafezone;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * Created by coreyja on 12/8/13.
@@ -152,6 +153,11 @@ public class SafeZone {
 
     public void setExtra_info(String extra_info) {
         this.extra_info = extra_info;
+    }
+
+    // Create and return a new MarkerOptions object using the position of this SafeZone
+    public MarkerOptions generateMarkerOptions() {
+        return new MarkerOptions().position(this.position);
     }
 
 
