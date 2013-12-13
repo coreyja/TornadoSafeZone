@@ -243,6 +243,10 @@ public final class SafeZone extends com.google.api.client.json.GenericJson {
         return (this.getMaxOccupancy() != null);
     }
 
+    public boolean hasOccupancy() {
+        return (this.getOccupancy() != null);
+    }
+
     // This method will return a formatted string of the hours for the current day of the week
     public String getTodaysFormattedHours() {
 

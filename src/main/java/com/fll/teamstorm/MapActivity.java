@@ -132,10 +132,17 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         }
 
         // Set the capacity if it exists. And hide the TextView if it doesn't
-        if (sz.hasMaxOccupancy()){
-            ((TextView)v.findViewById(R.id.info_capacity)).setText(getString(R.string.format_capacity, sz.getMaxOccupancy()));
+        if (sz.hasOccupancy()){
+            ((TextView)v.findViewById(R.id.info_occupancy)).setText(getString(R.string.format_occupancy, sz.getOccupancy()));
         } else {
-            v.findViewById(R.id.info_capacity).setVisibility(View.GONE);
+            v.findViewById(R.id.info_occupancy).setVisibility(View.GONE);
+        }
+
+        // Set the capacity if it exists. And hide the TextView if it doesn't
+        if (sz.hasMaxOccupancy()){
+            ((TextView)v.findViewById(R.id.info_max_occupancy)).setText(getString(R.string.format_max_occupancy, sz.getMaxOccupancy()));
+        } else {
+            v.findViewById(R.id.info_max_occupancy).setVisibility(View.GONE);
         }
 
         // Do the same as above for the phone number
