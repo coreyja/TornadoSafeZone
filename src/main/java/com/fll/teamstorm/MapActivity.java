@@ -1,6 +1,7 @@
 package com.fll.teamstorm;
 
 import android.app.Activity;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,8 +14,14 @@ import android.widget.TextView;
 import com.appspot.perfect_atrium_421.safezones.Safezones;
 import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
 import com.appspot.perfect_atrium_421.safezones.model.SafeZoneCollection;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.json.gson.GsonFactory;
@@ -22,7 +29,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import java.io.IOException;
 import java.util.List;
 
-public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter{
+public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
 
     public static final String TAG = "FLL-TS";
 
@@ -31,6 +38,10 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
     private Safezones mService;
 
     private List<SafeZone> safeZones;
+
+    private LocationClient mLocationClient;
+
+    private  boolean hasZoomedIntoInitialLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +57,34 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         mMap.setMyLocationEnabled(true);
         mMap.setInfoWindowAdapter(this);
 
+        // Set up the LocationClient. This is to auto-zoom when location is available
+        this.mLocationClient = new LocationClient(this, this, this);
+        this.hasZoomedIntoInitialLocation = false;
+
         // Retrieve SafeZones from Endpoints
         this.populateSafeZones();
 
+    }
+
+    /*
+     * Called when the Activity becomes visible.
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Connect the client.
+        mLocationClient.connect();
+    }
+
+
+    /*
+     * Called when the Activity is no longer visible.
+     */
+    @Override
+    protected void onStop() {
+        // Disconnecting the client invalidates it.
+        mLocationClient.disconnect();
+        super.onStop();
     }
 
     private void populateSafeZones() {
@@ -101,6 +137,7 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         return super.onOptionsItemSelected(item);
     }
 
+    /********** GoogleMap.InfoWindowAdapter **********/
 
     @Override
     public View getInfoWindow(Marker marker) {
@@ -174,6 +211,37 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         }
 
         return v;
+    }
+
+    /********** GooglePlayServicesClient.ConnectionCallbacks **********/
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+        // If we haven't already zoomed, we must have just been created. Zoom in now
+        if (!this.hasZoomedIntoInitialLocation){
+            // Get the location
+            Location loc = this.mLocationClient.getLastLocation();
+
+            // Create the CameraPosition object with the current location and default zoom
+            CameraPosition camPos = new CameraPosition.Builder().target(new LatLng(loc.getLatitude(), loc.getLongitude())).zoom(getResources().getInteger(R.integer.default_zoom_level)).build();
+            this.mMap.animateCamera(CameraUpdateFactory.newCameraPosition(camPos));
+
+            // Set this flag so everytime we resume this Activity it doesn't try and change the zoom
+            this.hasZoomedIntoInitialLocation = true;
+        }
+    }
+
+    @Override
+    public void onDisconnected() {
+
+    }
+
+    /********** GooglePlayServicesClient.OnConnectionFailedListener **********/
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 
     class QueryForSafeZones extends AsyncTask<Void, Void, SafeZoneCollection> {
