@@ -1,52 +1,63 @@
 package com.fll.teamstorm;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.appspot.perfect_atrium_421.safezones.Safezones;
+import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
+import com.appspot.perfect_atrium_421.safezones.model.SafeZoneCollection;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.json.gson.GsonFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter{
 
+    public static final String TAG = "FLL-TS";
+
     private GoogleMap mMap;
 
-    private ArrayList<SafeZone> safeZones = new ArrayList<SafeZone>();
+    private Safezones mService;
+
+    private List<SafeZone> safeZones;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        // Setup service for Endpoints
+        Safezones.Builder builder = new Safezones.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
+        mService = builder.build();
+
+        // Set up the Map Fragment
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-
         mMap.setMyLocationEnabled(true);
-
         mMap.setInfoWindowAdapter(this);
 
+        // Retrieve SafeZones from Endpoints
         this.populateSafeZones();
-
-        this.refreshMarkers();
 
     }
 
     private void populateSafeZones() {
-        // In the future this may be removed when we add async for endpoints
-        // For now just create some dummy SafeZones to add.
+        // Create the async task to get the SafeZones from endpoints
+        // The async task will refresh the markers when it completes
 
-        safeZones.clear();
-
-        safeZones.add(new SafeZone(new LatLng(39.483333, -87.324444), "Logan Library", "(303) 555-1234", 8, 0, 20, 0, 200, "Go to the 'Learning Center' in case of Tornado"));
-
-        safeZones.add(new SafeZone(new LatLng(39.48261667, -87.3295), "White Chapel"));
+        new QueryForSafeZones().execute();
 
     }
 
@@ -54,7 +65,9 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         mMap.clear();
 
         for (SafeZone s : safeZones){
-            mMap.addMarker(s.generateMarkerOptions());
+            if (s.getLocation() != null){
+                mMap.addMarker(s.generateMarkerOptions());
+            }
         }
     }
 
@@ -119,8 +132,8 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         }
 
         // Set the capacity if it exists. And hide the TextView if it doesn't
-        if (sz.hasCapacity()){
-            ((TextView)v.findViewById(R.id.info_capacity)).setText(getString(R.string.format_capacity, sz.getCapacity()));
+        if (sz.hasMaxOccupancy()){
+            ((TextView)v.findViewById(R.id.info_capacity)).setText(getString(R.string.format_capacity, sz.getMaxOccupancy()));
         } else {
             v.findViewById(R.id.info_capacity).setVisibility(View.GONE);
         }
@@ -134,11 +147,48 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
 
         // And last but not least, extra info
         if (sz.hasExtraInfo()){
-            ((TextView)v.findViewById(R.id.info_extrainfo)).setText(sz.getExtra_info());
+            ((TextView)v.findViewById(R.id.info_extrainfo)).setText(sz.getExtraInfo());
         } else {
             v.findViewById(R.id.info_extrainfo).setVisibility(View.GONE);
         }
 
         return v;
+    }
+
+    class QueryForSafeZones extends AsyncTask<Void, Void, SafeZoneCollection> {
+
+        @Override
+        protected SafeZoneCollection doInBackground(Void... voids) {
+            SafeZoneCollection safezones = null;
+            try {
+                safezones = mService.safezone().list().setLimit(50L).execute();
+            } catch (IOException e){
+                Log.d(TAG, "Failed Loading " + e);
+            }
+
+            return safezones;
+        }
+
+        protected void onPostExecute(SafeZoneCollection result){
+            super.onPostExecute(result);
+
+            if (result == null){
+                Log.d(TAG, "Failed Loading, result is null");
+                return;
+            }
+
+            List<com.appspot.perfect_atrium_421.safezones.model.SafeZone> list = result.getItems();
+
+            if (list == null || list.isEmpty()){
+                Log.d(TAG, "Failed Failed. Result received, but no SafeZones found.");
+                return;
+            }
+
+            // Save the list retrieved
+            MapActivity.this.safeZones = list;
+
+            // Update the markers on the map
+            refreshMarkers();
+        }
     }
 }

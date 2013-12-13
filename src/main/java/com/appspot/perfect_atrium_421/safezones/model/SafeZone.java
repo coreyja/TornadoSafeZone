@@ -18,6 +18,9 @@
 
 package com.appspot.perfect_atrium_421.safezones.model;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 /**
  * Model definition for SafeZone.
  *
@@ -215,4 +218,45 @@ public final class SafeZone extends com.google.api.client.json.GenericJson {
     return (SafeZone) super.clone();
   }
 
+
+  /************ Added Manually: Helper Methods since this is my new main model **********************/
+
+    public boolean hasPhone() {
+        return (this.getPhone() != null);
+    }
+
+    public boolean hasHours() {
+        return (this.getHours() != null);
+    }
+
+    public boolean hasExtraInfo() {
+        return (this.getExtraInfo() != null);
+    }
+
+    public boolean hasMaxOccupancy() {
+        return (this.getMaxOccupancy() != null);
+    }
+
+    //TODO: Delete/Refactor the below method
+    public String getFormattedHours() {
+        String s = "";
+
+        s += this.getHours().getMonOpen();
+
+        s += " to ";
+
+        s += this.getHours().getMonClose();
+
+        return s;
+    }
+
+    public MarkerOptions generateMarkerOptions(){
+        // If either of the properties needed don't exists, simply return null
+        if (this.getLocation() == null || this.getTitle() == null){
+            return null;
+        }
+
+        LatLng pos = new LatLng(this.getLocation().getLat(), this.getLocation().getLon());
+        return new MarkerOptions().position(pos).title(this.title);
+    }
 }
