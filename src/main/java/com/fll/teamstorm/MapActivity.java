@@ -1,7 +1,13 @@
 package com.fll.teamstorm;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +18,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.appspot.perfect_atrium_421.safezones.Safezones;
+import com.appspot.perfect_atrium_421.safezones.model.GeoPtMessage;
 import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
 import com.appspot.perfect_atrium_421.safezones.model.SafeZoneCollection;
 import com.google.android.gms.common.ConnectionResult;
@@ -29,10 +36,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import java.io.IOException;
 import java.util.List;
 
-
-// TODO: Add listener for InfoWindow click
-
-public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
+public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.OnInfoWindowClickListener {
 
     public static final String TAG = "FLL-TS";
 
@@ -59,6 +63,7 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         mMap.setMyLocationEnabled(true);
         mMap.setInfoWindowAdapter(this);
+        mMap.setOnInfoWindowClickListener(this);
 
         // Set up the LocationClient. This is to auto-zoom when location is available
         this.mLocationClient = new LocationClient(this, this, this);
@@ -246,6 +251,16 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
 
     }
 
+    /********** GoogleMap.OnInfoWindowClickListener **********/
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        SafeZone sz = this.getSafeZoneFromTitle(marker.getTitle());
+
+        new IntentLauncherDialogFragment(sz).show(getFragmentManager(), IntentLauncherDialogFragment.TAG);
+
+    }
+
     class QueryForSafeZones extends AsyncTask<Void, Void, SafeZoneCollection> {
 
         @Override
@@ -280,6 +295,58 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
 
             // Update the markers on the map
             refreshMarkers();
+        }
+    }
+
+    public class IntentLauncherDialogFragment extends DialogFragment {
+
+        public static final String TAG = "SZ-INTENTS";
+
+        private SafeZone sz;
+
+        public IntentLauncherDialogFragment(SafeZone sz) {
+            this.sz = sz;
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+            builder.setTitle(sz.getTitle());
+
+            builder.setPositiveButton(R.string.intents_directions_button, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    /* Launch gMaps with directions from current location to SafeZone */
+                    Location src = mLocationClient.getLastLocation();
+                    GeoPtMessage dest = sz.getLocation();
+
+                    String uri = String.format("http://maps.google.com/maps?saddr=%f,%f&daddr=%f,%f", src.getLatitude(), src.getLongitude(), dest.getLat(), dest.getLon());
+                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(uri));
+                    startActivity(intent);
+                }
+            });
+
+            // If this SafeZone has a phone give the option to call it.
+            if (sz.hasPhone()) {
+                builder.setMessage(R.string.intents_message_both);
+
+                builder.setNeutralButton(R.string.intents_call_button, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    /* Launch Dialer with number pre-filled */
+                        String uri = "tel:" + sz.getPhone();
+                        Intent intent = new Intent(Intent.ACTION_DIAL);
+                        intent.setData(Uri.parse(uri));
+                        startActivity(intent);
+                    }
+                });
+            } else {
+                builder.setMessage(R.string.intents_message_no_phone);
+            } 
+
+            return builder.create();
         }
     }
 }

@@ -25,4 +25,10 @@
     <string name="about_development_by">App Development by Corey Alexander</string>
     <string name="about_title">About Us</string>
 
+    <string name="intents_message_both">Would you like to get directions or call this SafeZone?</string>
+    <string name="intents_message_no_phone">Would you like to get directions to this SafeZone?</string>
+
+    <string name="intents_directions_button">Get Directions</string>
+    <string name="intents_call_button">Call SafeZone</string>
+
 </resources>
