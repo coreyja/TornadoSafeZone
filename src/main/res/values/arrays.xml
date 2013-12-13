@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="team_members">
+        <item>Caleb Boutell</item>
+        <item>Elise Boutell</item>
+        <item>Jonathan Boutell</item>
+        <item>Ellie Goodwin</item>
+        <item>Aidan Truby</item>
+        <item>Devon Langley</item>
+        <item>Trevor Langley</item>
+        <item>Kira Lenderman</item>
+    </string-array>
+
+
+</resources>

@@ -4,6 +4,7 @@
     <string name="app_name">TornadoSafeZone</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_about">About Us</string>
     <string name="title_activity_launcher">TornadoSafeZone</string>
     <string name="view_safe_zones">View Safe Zones</string>
     <string name="for_kids">For Kids</string>
@@ -18,5 +19,10 @@
     <string name="occupancy_75">This SafeZone currently has over 75% of it\'s maximum occupancy.</string>
     <string name="occupancy_90">This SafeZone currently has over 90% of it\'s maximum occupancy.</string>
     <string name="occupancy_100">This SafeZone currently is completely full.</string>
+
+
+    <string name="about_idea_by">App Idea by Team Storm:</string>
+    <string name="about_development_by">App Development by Corey Alexander</string>
+    <string name="about_title">About Us</string>
 
 </resources>

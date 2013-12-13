@@ -29,6 +29,9 @@ import com.google.api.client.json.gson.GsonFactory;
 import java.io.IOException;
 import java.util.List;
 
+
+// TODO: Add listener for InfoWindow click
+
 public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
 
     public static final String TAG = "FLL-TS";
@@ -119,9 +122,8 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+       // TODO: Add a menu to the map Activity to do cool stuff eventually
+
         return true;
     }
 
@@ -131,7 +133,7 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_about) {
             return true;
         }
         return super.onOptionsItemSelected(item);

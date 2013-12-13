@@ -1,6 +1,9 @@
 package com.fll.teamstorm;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -40,7 +43,10 @@ public class LauncherActivity extends Activity implements View.OnClickListener{
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_about) {
+
+            new AboutUsDialogFragment().show(getFragmentManager(), AboutUsDialogFragment.TAG);
+
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -66,5 +72,34 @@ public class LauncherActivity extends Activity implements View.OnClickListener{
             startActivity(i);
         }
 
+    }
+
+    public class AboutUsDialogFragment extends DialogFragment {
+
+        public static final String TAG = "ABOUT";
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+            builder.setTitle(R.string.about_title);
+
+            // Add the Idea By title to the message
+            String message = getString(R.string.about_idea_by) + "\n";
+
+            // Get the array of all the Team Members and add them to the message.
+            String[] teamMems = getResources().getStringArray(R.array.team_members);
+            for (String s: teamMems) {
+                message += String.format("\t- %s\n", s);
+            }
+
+            // Add the development by string
+            message += "\n" + getString(R.string.about_development_by);
+
+            // Set the message in the builder
+            builder.setMessage(message);
+
+            return builder.create();
+        }
     }
 }
