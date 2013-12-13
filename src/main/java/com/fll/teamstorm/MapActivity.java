@@ -205,6 +205,7 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
 
         // Do the same as above for the phone number
         if (sz.hasPhone()){
+            // Use Utils to format the Phone Number pretty if it matches the format we are expecting
             ((TextView)v.findViewById(R.id.info_phone)).setText(Utils.formatPhoneNumber(sz.getPhone()));
         } else {
             v.findViewById(R.id.info_phone).setVisibility(View.GONE);
