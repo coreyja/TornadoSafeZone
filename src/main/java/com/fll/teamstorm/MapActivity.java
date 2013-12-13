@@ -15,13 +15,11 @@ import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
 import com.appspot.perfect_atrium_421.safezones.model.SafeZoneCollection;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.json.gson.GsonFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter{
@@ -143,6 +141,22 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
             ((TextView)v.findViewById(R.id.info_max_occupancy)).setText(getString(R.string.format_max_occupancy, sz.getMaxOccupancy()));
         } else {
             v.findViewById(R.id.info_max_occupancy).setVisibility(View.GONE);
+        }
+
+        // Sets the occupancy info text field if this SafeZone is nearing capacity.
+        double percentFull = sz.getPercentFull();
+        if (sz.hasOccupancy() && sz.hasMaxOccupancy() && percentFull > 0.75){
+
+            if (percentFull > 0.9) {
+                ((TextView)v.findViewById(R.id.info_occupancy_info)).setText(getString(R.string.occupancy_90));
+                ((TextView)v.findViewById(R.id.info_occupancy_info)).setTextColor(getResources().getColor(R.color.occupancy_90));
+            } else { // percentFull > 0.75
+                ((TextView)v.findViewById(R.id.info_occupancy_info)).setText(getString(R.string.occupancy_75));
+                ((TextView)v.findViewById(R.id.info_occupancy_info)).setTextColor(getResources().getColor(R.color.occupancy_75));
+            }
+
+        } else {
+            v.findViewById(R.id.info_occupancy_info).setVisibility(View.GONE);
         }
 
         // Do the same as above for the phone number

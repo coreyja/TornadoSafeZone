@@ -15,4 +15,8 @@
     <string name="format_occupancy">Current Occupancy: %01d</string>
     <string name="format_max_occupancy">Max Occupancy: %01d</string>
 
+    <string name="occupancy_75">This SafeZone currently has over 75% of it\'s maximum occupancy.</string>
+    <string name="occupancy_90">This SafeZone currently has over 90% of it\'s maximum occupancy.</string>
+    <string name="occupancy_100">This SafeZone currently is completely full.</string>
+
 </resources>

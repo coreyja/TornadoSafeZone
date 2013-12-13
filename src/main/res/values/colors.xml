@@ -8,4 +8,8 @@
     <color name="blue">#FF63B6FF</color>
     <color name="orange">#ffffa500</color>
 
+    <color name="occupancy_90">#ffff0000</color>
+    <color name="occupancy_75">#ffe6d600</color>
+
+
 </resources>

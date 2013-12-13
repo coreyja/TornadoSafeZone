@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp">
+    android:padding="5dp">
 
     <TextView
         android:layout_width="wrap_content"
@@ -30,7 +30,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:id="@+id/info_occupancy_info"
+        android:gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:id="@+id/info_hours" />
+
+    <!-- TODO: Add a info text for hours. This would display info about the location being closed or close to closing. -->
 
     <TextView
         android:layout_width="wrap_content"
@@ -42,7 +51,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/info_extrainfo"
-        android:layout_marginTop="5dp" />
+        android:layout_marginTop="5dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal" />
 
 
 

@@ -22,6 +22,7 @@ import android.util.Log;
 
 import com.fll.teamstorm.MapActivity;
 import com.fll.teamstorm.Utils;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -327,6 +328,30 @@ public final class SafeZone extends com.google.api.client.json.GenericJson {
         }
 
         LatLng pos = new LatLng(this.getLocation().getLat(), this.getLocation().getLon());
-        return new MarkerOptions().position(pos).title(this.title);
+        return new MarkerOptions().position(pos).title(this.title).icon(BitmapDescriptorFactory.defaultMarker(this.getMarkerHue()));
+    }
+
+    public double getPercentFull() {
+        return (this.getOccupancy() * 1.0) / this.getMaxOccupancy(); //Multiply by 1.0 to make sure we get a double before division
+    }
+
+    // TODO: Color code by hours open vs current hour as well
+    private float getMarkerHue() {
+        // Default to green unless other things are true
+        float hue = BitmapDescriptorFactory.HUE_GREEN;
+
+        if (this.hasOccupancy() && this.hasMaxOccupancy()){
+            double percentFull = this.getPercentFull();
+
+            if (percentFull > 0.75){
+                hue = BitmapDescriptorFactory.HUE_YELLOW;
+            }
+
+            if (percentFull > 0.9) {
+                hue = BitmapDescriptorFactory.HUE_RED;
+            }
+        }
+
+        return hue;
     }
 }
