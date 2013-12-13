@@ -18,8 +18,14 @@
 
 package com.appspot.perfect_atrium_421.safezones.model;
 
+import android.util.Log;
+
+import com.fll.teamstorm.MapActivity;
+import com.fll.teamstorm.Utils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.Calendar;
 
 /**
  * Model definition for SafeZone.
@@ -237,15 +243,68 @@ public final class SafeZone extends com.google.api.client.json.GenericJson {
         return (this.getMaxOccupancy() != null);
     }
 
-    //TODO: Delete/Refactor the below method
-    public String getFormattedHours() {
-        String s = "";
+    // This method will return a formatted string of the hours for the current day of the week
+    public String getTodaysFormattedHours() {
 
-        s += this.getHours().getMonOpen();
+        // Determine the day of the week
+        Calendar c = Calendar.getInstance();
+        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
 
-        s += " to ";
+        String openTime, closeTime;
+        String dayOfWeekString;
 
-        s += this.getHours().getMonClose();
+        Hours h = this.getHours();
+
+        switch (dayOfWeek){
+            case Calendar.MONDAY:
+                openTime = h.getMonOpen();
+                closeTime = h.getMonClose();
+                dayOfWeekString = "Monday";
+                break;
+            case Calendar.TUESDAY:
+                openTime = h.getTueOpen();
+                closeTime = h.getTueClose();
+                dayOfWeekString = "Tuesday";
+                break;
+            case Calendar.WEDNESDAY:
+                openTime = h.getWedOpen();
+                closeTime = h.getWedClose();
+                dayOfWeekString = "Wednesday";
+                break;
+            case Calendar.THURSDAY:
+                openTime = h.getThursOpen();
+                closeTime = h.getThursClose();
+                dayOfWeekString = "Thursday";
+                break;
+            case Calendar.FRIDAY:
+                openTime = h.getFriOpen();
+                closeTime = h.getFriClose();
+                dayOfWeekString = "Friday";
+                break;
+            case Calendar.SATURDAY:
+                openTime = h.getSatOpen();
+                closeTime = h.getSatClose();
+                dayOfWeekString = "Saturday";
+                break;
+            case Calendar.SUNDAY:
+                openTime = h.getSunOpen();
+                closeTime = h.getSunClose();
+                dayOfWeekString = "Sunday";
+                break;
+            default:
+                // How in the world is the day of the week now one of the above??
+                Log.d(MapActivity.TAG, "Current day of week returned by Calender is not a valid day of the week");
+                openTime = closeTime = "";
+                dayOfWeekString = "";
+        }
+
+        String s = dayOfWeekString + ": ";
+
+        s += Utils.formatTimeString(openTime);
+
+        s += " till ";
+
+        s += Utils.formatTimeString(closeTime);
 
         return s;
     }

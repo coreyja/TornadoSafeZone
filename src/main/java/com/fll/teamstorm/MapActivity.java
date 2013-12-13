@@ -126,7 +126,7 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
 
         // Set the hours if they exists. And hide the TextView if it doesn't
         if (sz.hasHours()){
-            ((TextView)v.findViewById(R.id.info_hours)).setText(sz.getFormattedHours());
+            ((TextView)v.findViewById(R.id.info_hours)).setText(sz.getTodaysFormattedHours());
         } else {
             v.findViewById(R.id.info_hours).setVisibility(View.GONE);
         }
@@ -140,7 +140,7 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
 
         // Do the same as above for the phone number
         if (sz.hasPhone()){
-            ((TextView)v.findViewById(R.id.info_phone)).setText(sz.getPhone());
+            ((TextView)v.findViewById(R.id.info_phone)).setText(Utils.formatPhoneNumber(sz.getPhone()));
         } else {
             v.findViewById(R.id.info_phone).setVisibility(View.GONE);
         }
