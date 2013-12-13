@@ -13,12 +13,12 @@
     <string name="for_seniors">For Seniors</string>
     <string name="not_implemented">This activity not implemented yet! We are working on it.</string>
 
-    <string name="format_occupancy">Current Occupancy: %01d</string>
-    <string name="format_max_occupancy">Max Occupancy: %01d</string>
+    <string name="format_occupancy">Current Occupancy: %d</string>
+    <string name="format_max_occupancy">Maximum Occupancy: %d</string>
 
-    <string name="occupancy_75">This SafeZone currently has over 75% of it\'s maximum occupancy.</string>
-    <string name="occupancy_90">This SafeZone currently has over 90% of it\'s maximum occupancy.</string>
-    <string name="occupancy_100">This SafeZone currently is completely full.</string>
+    <string name="occupancy_75">This SafeZone is currently over 75% full.</string>
+    <string name="occupancy_90">This SafeZone is currently over 90% full.</string>
+    <string name="occupancy_100">This SafeZone is currently completely full.</string>
 
 
     <string name="about_idea_by">App Idea by Team Storm:</string>
@@ -31,5 +31,7 @@
     <string name="intents_directions_button">Get Directions</string>
     <string name="intents_call_button">Call SafeZone</string>
     <string name="info_click_me_message">Click this bubble to call this SafeZone or get directions to it.</string>
+
+    <string name="info_format_dist_away">%.1f miles away</string>
 
 </resources>

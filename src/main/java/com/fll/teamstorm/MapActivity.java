@@ -166,6 +166,13 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         // Set the title of the info window
         ((TextView)v.findViewById(R.id.info_title)).setText(sz.getTitle());
 
+        // Calculate and display the current distance from this SafeZone
+        Location loc = this.mLocationClient.getLastLocation();
+        LatLng dest = marker.getPosition();
+        double miles = Utils.kmToMiles(Utils.distanceBetweenPoints(loc, dest));
+        ((TextView)v.findViewById(R.id.info_dist_away)).setText(getString(R.string.info_format_dist_away, miles));
+
+
         // Set the hours if they exists. And hide the TextView if it doesn't
         if (sz.hasHours()){
             ((TextView)v.findViewById(R.id.info_hours)).setText(sz.getTodaysFormattedHours());

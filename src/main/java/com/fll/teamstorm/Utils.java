@@ -1,6 +1,9 @@
 package com.fll.teamstorm;
 
+import android.location.Location;
 import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Created by coreyja on 12/13/13.
@@ -51,5 +54,36 @@ public class Utils {
 
         return toReturn;
 
+    }
+
+    // Returns the distance between the two points in km.
+    // Uses the haversine formula to convert
+    // Formula taken from http://www.movable-type.co.uk/scripts/latlong.html
+    public static double distanceBetweenPoints(LatLng l1, LatLng l2){
+
+        double radius = 6371; // Average Radius of the Earth in km
+
+        double dLat = Math.toRadians(l2.latitude - l1.latitude);
+        double dLong = Math.toRadians(l2.longitude - l1.longitude);
+
+        double lat1 = Math.toRadians(l1.latitude);
+        double lat2 = Math.toRadians(l2.latitude);
+
+        double a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.sin(dLong/2) * Math.sin(dLong/2) * Math.cos(lat1) * Math.cos(lat2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double d = radius * c;
+
+        return d;
+
+    }
+
+    // Helper method that takes a Location and a LatLng and converts the Location to a LatLng so we can calculate distance between them.
+    public static double distanceBetweenPoints(Location l1, LatLng l2){
+        return distanceBetweenPoints(new LatLng(l1.getLatitude(), l1.getLongitude()), l2);
+    }
+
+    // Simple method to convert km to miles
+    public static double kmToMiles(double km){
+        return km * 0.621371;
     }
 }
