@@ -310,7 +310,7 @@ public final class SafeZone extends com.google.api.client.json.GenericJson {
             return dayOfWeekString + ": CLOSED";
         }
 
-        String s = dayOfWeekString + ": ";
+        String s = dayOfWeekString + " Hours: ";
 
         s += Utils.formatTimeString(openTime);
 
