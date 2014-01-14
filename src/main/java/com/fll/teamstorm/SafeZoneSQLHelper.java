@@ -261,18 +261,6 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
         new LoadAllSafeZones().execute();
     }
 
-    // TODO: Make Async
-    public SafeZone getSafeZone(long id){
-        String selection = KEY_ID + "=" + id;
-
-        Cursor c = db.query(true, TABLE_NAME, PROJECTION, selection, null,null,null,null,null);
-
-        if(c != null && c.moveToFirst()) {
-            return getSafeZoneFromCursor(c);
-        }
-
-        return null;
-    }
 
     /********* Async Task Classes *********/
 
@@ -331,5 +319,6 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
             SafeZoneSQLHelper.this.safeZonesLoadedListener.onSafeZonesLoaded(result);
         }
     }
+
 
 }
