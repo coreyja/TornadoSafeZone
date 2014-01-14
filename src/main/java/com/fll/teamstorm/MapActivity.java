@@ -67,7 +67,12 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
 
         // Set up the LocationClient. This is to auto-zoom when location is available
         this.mLocationClient = new LocationClient(this, this, this);
-        this.hasZoomedIntoInitialLocation = false;
+        // If we have a savedInstanceState then not an initial load, so don't auto-zoom.
+        if (savedInstanceState == null) {
+            this.hasZoomedIntoInitialLocation = false;
+        } else {
+            this.hasZoomedIntoInitialLocation = true;
+        }
 
         // Retrieve SafeZones from Endpoints
         this.populateSafeZones();
@@ -287,7 +292,15 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
             super.onPostExecute(result);
 
             if (result == null){
-                Log.d(TAG, "Failed Loading, result is null");
+                Log.d(TAG, "Failed Loading, result is null. Load from the SQLite database.");
+
+                SafeZoneSQLHelper helper = new SafeZoneSQLHelper(MapActivity.this);
+                helper.open();
+
+                MapActivity.this.safeZones = helper.getAllSafeZones();
+
+                refreshMarkers();
+
                 return;
             }
 
@@ -296,6 +309,13 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
             if (list == null || list.isEmpty()){
                 Log.d(TAG, "Failed Failed. Result received, but no SafeZones found.");
                 return;
+            }
+
+            SafeZoneSQLHelper helper = new SafeZoneSQLHelper(MapActivity.this);
+            helper.open();
+
+            for (SafeZone sz : list){
+                helper.addSafeZone(sz);
             }
 
             // Save the list retrieved
