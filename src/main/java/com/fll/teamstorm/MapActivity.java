@@ -114,6 +114,38 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         super.onStop();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.map_dev, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        switch (id){
+            case R.id.menu_dev_empty_table:
+                this.SQLhelper.emptyTable();
+                break;
+
+            case R.id.menu_dev_refresh:
+                this.populateSafeZones();
+                break;
+
+            case R.id.menu_dev_load_sql:
+                this.SQLhelper.loadSafeZones();
+                break;
+
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     private void populateSafeZones() {
         // Create the async task to get the SafeZones from endpoints
         // The async task will refresh the markers when it completes
@@ -141,41 +173,6 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         }
 
         return null;
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.map_dev, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        switch (id){
-            case R.id.menu_dev_empty_table:
-                this.SQLhelper.emptyTable();
-                break;
-
-            case R.id.menu_dev_refresh:
-                this.populateSafeZones();
-                break;
-
-            case R.id.menu_dev_load_sql:
-                this.SQLhelper.loadSafeZones();
-                break;
-
-
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     /********** GoogleMap.InfoWindowAdapter **********/
