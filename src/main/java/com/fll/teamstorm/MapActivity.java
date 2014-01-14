@@ -74,12 +74,9 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
 
         // Set up the LocationClient. This is to auto-zoom when location is available
         this.mLocationClient = new LocationClient(this, this, this);
+
         // If we have a savedInstanceState then not an initial load, so don't auto-zoom.
-        if (savedInstanceState == null) {
-            this.hasZoomedIntoInitialLocation = false;
-        } else {
-            this.hasZoomedIntoInitialLocation = true;
-        }
+        this.hasZoomedIntoInitialLocation = (savedInstanceState != null);
 
         // Retrieve SafeZones from Endpoints
         this.populateSafeZones();

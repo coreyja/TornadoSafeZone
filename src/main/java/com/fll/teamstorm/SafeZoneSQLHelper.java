@@ -15,9 +15,6 @@ import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by coreyja on 1/13/14.
- */
 public class SafeZoneSQLHelper extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
@@ -203,7 +200,7 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
 
     private int _deleteSafeZone(long id){
         String clause = KEY_ID + "=?";
-        String args[] = {new Long(id).toString()};
+        String args[] = {Long.toString(id)};
 
         return this.db.delete(TABLE_NAME, clause, args);
     }
@@ -273,7 +270,7 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
             for (List<SafeZone> list : lists){
                 // Loop through all the SafeZones and add them to the SQLite DB
                 for (SafeZone sz : list){
-                    long id = SafeZoneSQLHelper.this._addSafeZone(sz);
+                    SafeZoneSQLHelper.this._addSafeZone(sz);
                 }
             }
 
@@ -300,9 +297,7 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
         @Override
         protected List<SafeZone> doInBackground(Void... voids) {
 
-            List<SafeZone> list = SafeZoneSQLHelper.this._getSafeZones();
-
-            return list;
+            return SafeZoneSQLHelper.this._getSafeZones();
         }
 
         @Override
