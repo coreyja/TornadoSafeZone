@@ -33,5 +33,8 @@
     <string name="info_click_me_message">Click this bubble to call this SafeZone or get directions to it.</string>
 
     <string name="info_format_dist_away">%.1f miles away</string>
+    <string name="menu_dev_empty_table">Empty SQLite Table</string>
+    <string name="menu_dev_refresh">Refresh SafeZones from Server</string>
+    <string name="menu_dev_load_sql">Load from SQLite DB</string>
 
 </resources>

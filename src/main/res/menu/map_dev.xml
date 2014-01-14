@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.fll.teamstorm.MapActivity">
+
+    <item android:id="@+id/menu_dev_empty_table"
+        android:title="@string/menu_dev_empty_table"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+
+    <item android:id="@+id/menu_dev_refresh"
+        android:title="@string/menu_dev_refresh"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+
+    <item android:id="@+id/menu_dev_load_sql"
+        android:title="@string/menu_dev_load_sql"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+
+</menu>

@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -36,7 +37,8 @@ import com.google.api.client.json.gson.GsonFactory;
 import java.io.IOException;
 import java.util.List;
 
-public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.OnInfoWindowClickListener {
+public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter, GooglePlayServicesClient.ConnectionCallbacks,
+        GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.OnInfoWindowClickListener, OnSafeZonesLoadedListener {
 
     public static final String TAG = "FLL-TS";
 
@@ -58,7 +60,7 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         setContentView(R.layout.activity_map);
 
         // Set up the SQLite helper
-        this.SQLhelper = new SafeZoneSQLHelper(MapActivity.this);
+        this.SQLhelper = new SafeZoneSQLHelper(MapActivity.this, MapActivity.this);
 
         // Setup service for Endpoints
         Safezones.Builder builder = new Safezones.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
@@ -116,7 +118,7 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         // Create the async task to get the SafeZones from endpoints
         // The async task will refresh the markers when it completes
 
-        new QueryForSafeZones().execute();
+        new QueryEndpointsForSafeZones().execute();
 
     }
 
@@ -144,7 +146,9 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-       // TODO: Add a menu to the map Activity to do cool stuff eventually
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.map_dev, menu);
 
         return true;
     }
@@ -155,9 +159,22 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_about) {
-            return true;
+        switch (id){
+            case R.id.menu_dev_empty_table:
+                this.SQLhelper.emptyTable();
+                break;
+
+            case R.id.menu_dev_refresh:
+                this.populateSafeZones();
+                break;
+
+            case R.id.menu_dev_load_sql:
+                this.SQLhelper.loadSafeZones();
+                break;
+
+
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -286,7 +303,22 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
 
     }
 
-    class QueryForSafeZones extends AsyncTask<Void, Void, SafeZoneCollection> {
+
+    /********* OnSafeZonesLoadedListener *********/
+
+    @Override
+    public void onSafeZonesLoaded(List<SafeZone> zones){
+
+        // Save the loaded zones
+        this.safeZones = zones;
+
+        // Refresh the markers on the map
+        this.refreshMarkers();
+    }
+
+    /********* Async Task Classes *********/
+
+    class QueryEndpointsForSafeZones extends AsyncTask<Void, Void, SafeZoneCollection> {
 
         @Override
         protected SafeZoneCollection doInBackground(Void... voids) {
@@ -304,11 +336,10 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
             super.onPostExecute(result);
 
             if (result == null){
-                Log.d(TAG, "Failed Loading, result is null. Load from the SQLite database.");
+                Log.d(TAG, "Failed Loading from Endpoints, result is null. Load from the SQLite database instead.");
 
-                MapActivity.this.safeZones = SQLhelper.getAllSafeZones();
-
-                refreshMarkers();
+                // SafeZones are loaded so save them and refresh the markers.
+                MapActivity.this.SQLhelper.loadSafeZones();
 
                 return;
             }
@@ -323,11 +354,8 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
             // This will launch an Async task that saves all the SafeZones to the db
             SQLhelper.addSafeZones(list);
 
-            // Save the list retrieved
-            MapActivity.this.safeZones = list;
-
-            // Update the markers on the map
-            refreshMarkers();
+            // SafeZones are loaded so save them and refresh the markers.
+            MapActivity.this.onSafeZonesLoaded(list);
         }
     }
 

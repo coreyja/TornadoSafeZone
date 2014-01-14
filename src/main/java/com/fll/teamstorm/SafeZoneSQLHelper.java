@@ -114,8 +114,12 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
 
     private SQLiteDatabase db;
 
-    public SafeZoneSQLHelper(Context context) {
+    private OnSafeZonesLoadedListener safeZonesLoadedListener;
+
+    public SafeZoneSQLHelper(Context context, OnSafeZonesLoadedListener safeZonesLoadedListener) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
+        this.safeZonesLoadedListener = safeZonesLoadedListener;
     }
 
 
@@ -134,8 +138,9 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
     }
 
     // Convert from SafeZone object to a table row
-    private ContentValues getContentValuesFromScore(SafeZone sz) {
+    private ContentValues getContentValuesFromSafeZone(SafeZone sz) {
         ContentValues rowValues = new ContentValues();
+        rowValues.put(KEY_ID, sz.getId());
         rowValues.put(KEY_TITLE, sz.getTitle());
         rowValues.put(KEY_PHONE, sz.getPhone());
         rowValues.put(KEY_OCCUPANCY, sz.getOccupancy());
@@ -166,6 +171,7 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
     private SafeZone getSafeZoneFromCursor(Cursor c) {
         SafeZone sz = new SafeZone();
 
+        sz.setId(c.getLong(c.getColumnIndexOrThrow(KEY_ID)));
         sz.setTitle(c.getString(c.getColumnIndexOrThrow(KEY_TITLE)));
         sz.setPhone(c.getString(c.getColumnIndexOrThrow(KEY_PHONE)));
         sz.setOccupancy(c.getLong(c.getColumnIndexOrThrow(KEY_OCCUPANCY)));
@@ -195,6 +201,34 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
         return sz;
     }
 
+    private int _deleteSafeZone(long id){
+        String clause = KEY_ID + "=?";
+        String args[] = {new Long(id).toString()};
+
+        return this.db.delete(TABLE_NAME, clause, args);
+    }
+
+    private long _addSafeZone(SafeZone sz){
+        ContentValues vals = getContentValuesFromSafeZone(sz);
+
+        this._deleteSafeZone(sz.getId());
+        return this.db.insert(TABLE_NAME, null, vals);
+    }
+
+    private ArrayList<SafeZone> _getSafeZones() {
+        ArrayList<SafeZone> list = new ArrayList<SafeZone>();
+
+        Cursor c = db.query(true, TABLE_NAME, PROJECTION, null, null,null,null,null,null);
+
+        if(c!=null && c.moveToFirst()){
+            do {
+                list.add(getSafeZoneFromCursor(c));
+            } while (c.moveToNext());
+        }
+
+        return list;
+    }
+
     public void open() {
         this.db = this.getWritableDatabase();
     }
@@ -203,13 +237,9 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
         this.db.close();
     }
 
-    private long _addSafeZone(SafeZone sz){
-        ContentValues vals = getContentValuesFromScore(sz);
-
-        String selection[] = {KEY_ID + "=" + sz.getId()};
-
-        this.db.delete(TABLE_NAME, null, selection);
-        return this.db.insert(TABLE_NAME, null, vals);
+    public void emptyTable() {
+        //Run the Async task to empty the table
+        new EmtpySafeZoneTable().execute();
     }
 
     public void addSafeZone(SafeZone sz){
@@ -226,6 +256,12 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
         return null;
     }
 
+    // Runs an Async task that loads SafeZones from the DB and passes them to the listener
+    public void loadSafeZones(){
+        new LoadAllSafeZones().execute();
+    }
+
+    // TODO: Make Async
     public SafeZone getSafeZone(long id){
         String selection = KEY_ID + "=" + id;
 
@@ -238,19 +274,7 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
         return null;
     }
 
-    public ArrayList<SafeZone> getAllSafeZones() {
-        ArrayList<SafeZone> list = new ArrayList<SafeZone>();
-
-        Cursor c = db.query(true, TABLE_NAME, PROJECTION, null, null,null,null,null,null);
-
-        if(c!=null && c.moveToFirst()){
-           do {
-               list.add(getSafeZoneFromCursor(c));
-           } while (c.moveToNext());
-        }
-
-        return list;
-    }
+    /********* Async Task Classes *********/
 
     class SaveSafeZonesToSQLite extends AsyncTask<List<SafeZone>, Void, Void> {
 
@@ -262,8 +286,6 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
                 // Loop through all the SafeZones and add them to the SQLite DB
                 for (SafeZone sz : list){
                     long id = SafeZoneSQLHelper.this._addSafeZone(sz);
-
-                    Log.d(MapActivity.TAG, id + " " + sz.toString());
                 }
             }
 
@@ -281,6 +303,32 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
             SafeZoneSQLHelper.this.db.execSQL(CREATE_STATEMENT);
 
             return null;
+        }
+    }
+
+    // Get all the SafeZones in the SQLite DB and pass the list along to the OnSafeZoneLoadedListener
+    class LoadAllSafeZones extends AsyncTask<Void, Void, List<SafeZone>>{
+
+        @Override
+        protected List<SafeZone> doInBackground(Void... voids) {
+
+            List<SafeZone> list = SafeZoneSQLHelper.this._getSafeZones();
+
+            return list;
+        }
+
+        @Override
+        protected void onPostExecute(List<SafeZone> result){
+            super.onPostExecute(result);
+
+            // Didn't complete successfully
+            if (result == null) {
+                Log.d(MapActivity.TAG, "Failed Loading from SQLite DB failed.");
+
+                return;
+            }
+
+            SafeZoneSQLHelper.this.safeZonesLoadedListener.onSafeZonesLoaded(result);
         }
     }
 
