@@ -50,10 +50,15 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
 
     private  boolean hasZoomedIntoInitialLocation;
 
+    private SafeZoneSQLHelper SQLhelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        // Set up the SQLite helper
+        this.SQLhelper = new SafeZoneSQLHelper(MapActivity.this);
 
         // Setup service for Endpoints
         Safezones.Builder builder = new Safezones.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
@@ -87,6 +92,9 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         super.onStart();
         // Connect the client.
         mLocationClient.connect();
+
+        // Open the SQLite helper
+        this.SQLhelper.open();
     }
 
 
@@ -97,6 +105,10 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
     protected void onStop() {
         // Disconnecting the client invalidates it.
         mLocationClient.disconnect();
+
+        // Close the SQLite helper
+        this.SQLhelper.close();
+
         super.onStop();
     }
 
@@ -294,10 +306,7 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
             if (result == null){
                 Log.d(TAG, "Failed Loading, result is null. Load from the SQLite database.");
 
-                SafeZoneSQLHelper helper = new SafeZoneSQLHelper(MapActivity.this);
-                helper.open();
-
-                MapActivity.this.safeZones = helper.getAllSafeZones();
+                MapActivity.this.safeZones = SQLhelper.getAllSafeZones();
 
                 refreshMarkers();
 
@@ -311,12 +320,8 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
                 return;
             }
 
-            SafeZoneSQLHelper helper = new SafeZoneSQLHelper(MapActivity.this);
-            helper.open();
-
-            for (SafeZone sz : list){
-                helper.addSafeZone(sz);
-            }
+            // This will launch an Async task that saves all the SafeZones to the db
+            SQLhelper.addSafeZones(list);
 
             // Save the list retrieved
             MapActivity.this.safeZones = list;

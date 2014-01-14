@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.appspot.perfect_atrium_421.safezones.model.GeoPtMessage;
@@ -12,6 +13,7 @@ import com.appspot.perfect_atrium_421.safezones.model.Hours;
 import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by coreyja on 1/13/14.
@@ -201,9 +203,27 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
         this.db.close();
     }
 
-    public long addSafeZone(SafeZone sz){
+    private long _addSafeZone(SafeZone sz){
         ContentValues vals = getContentValuesFromScore(sz);
+
+        String selection[] = {KEY_ID + "=" + sz.getId()};
+
+        this.db.delete(TABLE_NAME, null, selection);
         return this.db.insert(TABLE_NAME, null, vals);
+    }
+
+    public void addSafeZone(SafeZone sz){
+        // Make a new ArrayList with the one SafeZone so we can use the Async that is already written
+        ArrayList<SafeZone> list = new ArrayList<SafeZone>();
+        list.add(sz);
+
+        new SaveSafeZonesToSQLite().execute(list);
+    }
+
+    public long[] addSafeZones(List<SafeZone> zones){
+        new SaveSafeZonesToSQLite().execute(zones);
+
+        return null;
     }
 
     public SafeZone getSafeZone(long id){
@@ -230,6 +250,38 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
         }
 
         return list;
+    }
+
+    class SaveSafeZonesToSQLite extends AsyncTask<List<SafeZone>, Void, Void> {
+
+        @Override
+        protected Void doInBackground(List<SafeZone>... lists) {
+
+            // Run over all the lists that we might be given
+            for (List<SafeZone> list : lists){
+                // Loop through all the SafeZones and add them to the SQLite DB
+                for (SafeZone sz : list){
+                    long id = SafeZoneSQLHelper.this._addSafeZone(sz);
+
+                    Log.d(MapActivity.TAG, id + " " + sz.toString());
+                }
+            }
+
+            return null;
+        }
+    }
+
+    // Empty the table by dropping and re-adding it, as an Async task
+    class EmtpySafeZoneTable extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            // Drop then create the table again
+            SafeZoneSQLHelper.this.db.execSQL(DROP_STATEMENT);
+            SafeZoneSQLHelper.this.db.execSQL(CREATE_STATEMENT);
+
+            return null;
+        }
     }
 
 }
