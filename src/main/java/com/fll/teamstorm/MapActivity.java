@@ -78,9 +78,6 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         // If we have a savedInstanceState then not an initial load, so don't auto-zoom.
         this.hasZoomedIntoInitialLocation = (savedInstanceState != null);
 
-        // Retrieve SafeZones from Endpoints
-        this.populateSafeZones();
-
     }
 
     /*
@@ -94,6 +91,10 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
 
         // Open the SQLite helper
         this.SQLhelper.open();
+        this.SQLhelper.loadSafeZones();
+
+        // Retrieve SafeZones from SQL while Endpoints loads
+        this.populateSafeZonesFromEndoints();
     }
 
 
@@ -130,7 +131,7 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
                 break;
 
             case R.id.menu_dev_refresh:
-                this.populateSafeZones();
+                this.populateSafeZonesFromEndoints();
                 break;
 
             case R.id.menu_dev_load_sql:
@@ -143,7 +144,7 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         return super.onOptionsItemSelected(item);
     }
 
-    private void populateSafeZones() {
+    private void populateSafeZonesFromEndoints() {
         // Create the async task to get the SafeZones from endpoints
         // The async task will refresh the markers when it completes
 
@@ -332,9 +333,6 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
             if (result == null){
                 Log.d(TAG, "Failed Loading from Endpoints, result is null. Load from the SQLite database instead.");
 
-                // SafeZones are loaded so save them and refresh the markers.
-                MapActivity.this.SQLhelper.loadSafeZones();
-
                 return;
             }
 
@@ -344,6 +342,8 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
                 Log.d(TAG, "Failed Failed. Result received, but no SafeZones found.");
                 return;
             }
+
+            Log.i(MapActivity.TAG, "SafeZones loaded from Endpoints.");
 
             // This will launch an Async task that saves all the SafeZones to the db
             SQLhelper.addSafeZones(list);

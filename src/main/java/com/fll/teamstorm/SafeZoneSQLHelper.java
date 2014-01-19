@@ -311,6 +311,8 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
                 return;
             }
 
+            Log.i(MapActivity.TAG, "SafeZones loaded from SQLite.");
+
             SafeZoneSQLHelper.this.safeZonesLoadedListener.onSafeZonesLoaded(result);
         }
     }
