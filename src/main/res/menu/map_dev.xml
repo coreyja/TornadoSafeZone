@@ -19,4 +19,14 @@
         android:orderInCategory="100"
         android:showAsAction="never" />
 
+    <item android:id="@+id/menu_dev_clear_user_created"
+        android:title="@string/menu_dev_clear_user_created"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+
+    <item android:id="@+id/menu_dev_clear_not_user_created"
+        android:title="@string/menu_dev_clear_not_user_created"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+
 </menu>

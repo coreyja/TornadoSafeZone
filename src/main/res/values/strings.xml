@@ -34,9 +34,7 @@
     <string name="info_click_me_message">Click this bubble to call this SafeZone or get directions to it.</string>
 
     <string name="info_format_dist_away">%.1f miles away</string>
-    <string name="menu_dev_empty_table">Empty SQLite Table</string>
-    <string name="menu_dev_refresh">Refresh SafeZones from Server</string>
-    <string name="menu_dev_load_sql">Load from SQLite DB</string>
+
 
     <string name="dialog_add_safezone_title_hint">SafeZone Title</string>
     <string name="dialog_add_safezone_current_capacity_hint">Current Capacity</string>
@@ -49,5 +47,11 @@
     <string name="dialog_add_safezone_neutral_text">Add SafeZone</string>
     <string name="dialog_add_safezone_latitude_hint">Latitude</string>
     <string name="dialog_add_safezone_longitude_hint">Longitude</string>
+
+    <string name="menu_dev_clear_user_created">Delete all user created SZs</string>
+    <string name="menu_dev_clear_not_user_created">Delete all not user created SZs</string>
+    <string name="menu_dev_empty_table">Empty SQLite Table</string>
+    <string name="menu_dev_refresh">Load from Endpoints</string>
+    <string name="menu_dev_load_sql">Load from SQLite DB</string>
 
 </resources>

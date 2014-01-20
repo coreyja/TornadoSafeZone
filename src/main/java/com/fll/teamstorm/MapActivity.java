@@ -144,6 +144,15 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
                 this.SQLhelper.loadSafeZones();
                 break;
 
+            case R.id.menu_dev_clear_user_created:
+                this.SQLhelper.clearUserCreated();
+                break;
+
+            case R.id.menu_dev_clear_not_user_created:
+                this.SQLhelper.clearNotUserCreated();
+                break;
+
+
 
         }
 
@@ -310,7 +319,6 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
 
     @Override
     public void onSafeZonesLoaded(List<SafeZone> zones){
-
         // Save the loaded zones
         this.safeZones = zones;
 
@@ -367,11 +375,12 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
 
             Log.i(MapActivity.TAG, String.format("%d SafeZones loaded from Endpoints.", list.size()));
 
-            // This will launch an Async task that saves all the SafeZones to the db
-            SQLhelper.addSafeZones(list);
+            // Clear all the not user created.
+            // This is so items deleted from the server aren't still on the device
+            SQLhelper.clearNotUserCreated();
 
-            // SafeZones are loaded so save them and refresh the markers.
-            MapActivity.this.onSafeZonesLoaded(list);
+            // This will launch an Async task that saves all the SafeZones to the db. And after the save, load the SZ's from SQLite
+            SQLhelper.addSafeZones(list, true);
         }
     }
 

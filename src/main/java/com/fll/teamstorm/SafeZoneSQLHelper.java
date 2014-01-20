@@ -237,6 +237,22 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
         return list;
     }
 
+    private void _clearUserCreated() {
+        String clause = KEY_USERCREATED + "=?";
+        String args[] = {Integer.toString(1)};
+
+        this.db.delete(TABLE_NAME, clause, args);
+    }
+
+    private void _clearNotUserCreated() {
+        String clause = KEY_USERCREATED + "=?";
+        String args[] = {Integer.toString(0)};
+
+        this.db.delete(TABLE_NAME, clause, args);
+    }
+
+
+
     public void open() {
         this.db = this.getWritableDatabase();
     }
@@ -263,10 +279,13 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
         new SaveSafeZonesToSQLite(loadFromSQLiteAfterSave).execute(list);
     }
 
-    public long[] addSafeZones(List<SafeZone> zones){
-        new SaveSafeZonesToSQLite().execute(zones);
+    public void addSafeZones(List<SafeZone> zones){
+        // Don't refresh the SafeZone's after a save by default.
+        this.addSafeZones(zones, false);
+    }
 
-        return null;
+    public void addSafeZones(List<SafeZone> zones, boolean loadFromSQLiteAfterSave){
+        new SaveSafeZonesToSQLite(loadFromSQLiteAfterSave).execute(zones);
     }
 
     // Runs an Async task that loads SafeZones from the DB and passes them to the listener
@@ -274,11 +293,21 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
         new LoadAllSafeZones().execute();
     }
 
+    // Runs an Async task which deletes all user created SafeZones.
+    public void clearUserCreated() {
+        new ClearUserCreatedSafeZones().execute();
+    }
+
+    // Runs an Async task which deletes all not user created SafeZones.
+    public void clearNotUserCreated() {
+        new ClearNotUserCreatedSafeZones().execute();
+    }
+
 
     /********* Async Task Classes *********/
 
-    class SaveSafeZonesToSQLite extends AsyncTask<List<SafeZone>, Void, Void> {
-        private boolean loadFromSQLiteAfterSave = false; // Defaults to false unless given in constructor
+    private class SaveSafeZonesToSQLite extends AsyncTask<List<SafeZone>, Void, Void> {
+        private boolean loadFromSQLiteAfterSave = true; // Defaults to true unless given in constructor
 
         public SaveSafeZonesToSQLite() {
             super();
@@ -301,7 +330,7 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
 
                 Log.i(MapActivity.TAG, String.format("Saved %d SafeZones to SQLite.", list.size()));
 
-                // Conditionally load from SQLite if told to in constructor
+                // Conditionally load from SQLite if we are supposed to
                 if (loadFromSQLiteAfterSave) {
                     loadSafeZones();
                 }
@@ -313,7 +342,7 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
     }
 
     // Empty the table by dropping and re-adding it, as an Async task
-    class EmtpySafeZoneTable extends AsyncTask<Void, Void, Void>{
+    private class EmtpySafeZoneTable extends AsyncTask<Void, Void, Void>{
 
         @Override
         protected Void doInBackground(Void... voids) {
@@ -328,7 +357,7 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
     }
 
     // Get all the SafeZones in the SQLite DB and pass the list along to the OnSafeZoneLoadedListener
-    class LoadAllSafeZones extends AsyncTask<Void, Void, List<SafeZone>>{
+    private class LoadAllSafeZones extends AsyncTask<Void, Void, List<SafeZone>>{
 
         @Override
         protected List<SafeZone> doInBackground(Void... voids) {
@@ -353,5 +382,26 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
         }
     }
 
+    private class ClearUserCreatedSafeZones extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            SafeZoneSQLHelper.this._clearUserCreated();
+
+            return null;
+        }
+    }
+
+    private class ClearNotUserCreatedSafeZones extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            SafeZoneSQLHelper.this._clearNotUserCreated();
+
+            return null;
+        }
+    }
 
 }
