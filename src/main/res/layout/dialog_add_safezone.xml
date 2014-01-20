@@ -5,55 +5,146 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/dialog_add_safezone_title"
-        android:hint="@string/dialog_add_safezone_title_hint"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_add_safezone_title_label"
+            android:textSize="20sp"
+            android:layout_marginRight="10dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/dialog_add_safezone_title"
+            android:hint="@string/dialog_add_safezone_title_hint" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_add_safezone_latitude_label"
+            android:textSize="20sp"
+            android:layout_marginRight="10dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:id="@+id/dialog_add_safezone_latitude"
+            android:hint="@string/dialog_add_safezone_latitude_hint" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_add_safezone_longitude_label"
+            android:textSize="20sp"
+            android:layout_marginRight="10dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:id="@+id/dialog_add_safezone_longitude"
+            android:hint="@string/dialog_add_safezone_longitude_hint" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_add_safezone_current_capacity_label"
+            android:textSize="20sp"
+            android:layout_marginRight="10dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:id="@+id/dialog_add_safezone_current_capacity"
+            android:hint="@string/dialog_add_safezone_current_capacity_hint" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_add_safezone_max_capacity_label"
+            android:textSize="20sp"
+            android:layout_marginRight="10dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:id="@+id/dialog_add_safezone_max_capacity"
+            android:hint="@string/dialog_add_safezone_max_capacity_hint"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_add_safezone_phone_label"
+            android:textSize="20sp"
+            android:layout_marginRight="10dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:id="@+id/dialog_add_safezone_phone"
+            android:hint="@string/dialog_add_safezone_phone_hint" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dialog_add_safezone_extra_label"
         android:textSize="20sp" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:id="@+id/dialog_add_safezone_latitude"
-        android:hint="@string/dialog_add_safezone_latitude_hint" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:id="@+id/dialog_add_safezone_longitude"
-        android:hint="@string/dialog_add_safezone_longitude_hint" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:id="@+id/dialog_add_safezone_current_capacity"
-        android:hint="@string/dialog_add_safezone_current_capacity_hint" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:id="@+id/dialog_add_safezone_max_capacity"
-        android:hint="@string/dialog_add_safezone_max_capacity_hint"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="phone"
-        android:id="@+id/dialog_add_safezone_phone"
-        android:hint="@string/dialog_add_safezone_phone_hint" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
         android:id="@+id/dialog_add_safezone_extra"
-        android:hint="@string/dialog_add_safezone_extra_hint" />
+        android:hint="@string/dialog_add_safezone_extra_hint"
+        android:minLines="3" />
 
 
 </LinearLayout>
