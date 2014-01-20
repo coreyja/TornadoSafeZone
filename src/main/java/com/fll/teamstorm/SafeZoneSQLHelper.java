@@ -274,8 +274,11 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
                 }
             }
 
+            Log.i(MapActivity.TAG, "Saved all SafeZones to SQLite.");
+
             return null;
         }
+
     }
 
     // Empty the table by dropping and re-adding it, as an Async task
@@ -286,6 +289,8 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
             // Drop then create the table again
             SafeZoneSQLHelper.this.db.execSQL(DROP_STATEMENT);
             SafeZoneSQLHelper.this.db.execSQL(CREATE_STATEMENT);
+
+            Log.i(MapActivity.TAG, "Dropped and re-added SafeZone table.");
 
             return null;
         }
