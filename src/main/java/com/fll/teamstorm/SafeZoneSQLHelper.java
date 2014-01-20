@@ -17,7 +17,7 @@ import java.util.List;
 
 public class SafeZoneSQLHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     public static final String DATABASE_NAME = "SafeZonesDB";
 
@@ -31,6 +31,7 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
     public static final String KEY_LAT = "lat";
     public static final String KEY_LON = "lon";
     public static final String KEY_EXTRA = "extra";
+    public static final String KEY_USERCREATED = "user_created";
 
     public static final String KEY_MON_OPEN = "mon_open";
     public static final String KEY_MON_CLOSE = "mon_close";
@@ -71,6 +72,8 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
         s.append(" DOUBLE, ");
         s.append(KEY_EXTRA);
         s.append(" TEXT, ");
+        s.append(KEY_USERCREATED);
+        s.append(" INTEGER, ");
 
         s.append(KEY_MON_OPEN);
         s.append(" TEXT, ");
@@ -106,7 +109,7 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
     }
 
     private static final String[] PROJECTION = {KEY_ID, KEY_TITLE, KEY_PHONE, KEY_OCCUPANCY, KEY_MAX_OCCUPANCY,
-        KEY_LAT, KEY_LON, KEY_EXTRA, KEY_MON_OPEN, KEY_MON_CLOSE, KEY_TUE_OPEN, KEY_TUE_CLOSE, KEY_WED_OPEN, KEY_WED_CLOSE,
+        KEY_LAT, KEY_LON, KEY_EXTRA, KEY_USERCREATED, KEY_MON_OPEN, KEY_MON_CLOSE, KEY_TUE_OPEN, KEY_TUE_CLOSE, KEY_WED_OPEN, KEY_WED_CLOSE,
         KEY_THUR_OPEN, KEY_THUR_CLOSE, KEY_FRI_OPEN, KEY_FRI_CLOSE, KEY_SAT_OPEN, KEY_SAT_CLOSE, KEY_SUN_OPEN, KEY_SUN_CLOSE};
 
     private SQLiteDatabase db;
@@ -145,6 +148,7 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
         rowValues.put(KEY_LAT, sz.getLocation().getLat());
         rowValues.put(KEY_LON, sz.getLocation().getLon());
         rowValues.put(KEY_EXTRA, sz.getExtraInfo());
+        rowValues.put(KEY_USERCREATED, sz.isUserCreated());
 
         rowValues.put(KEY_MON_OPEN, sz.getHours().getMonOpen());
         rowValues.put(KEY_MON_CLOSE, sz.getHours().getMonClose());
@@ -175,6 +179,7 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
         sz.setMaxOccupancy(c.getLong(c.getColumnIndexOrThrow(KEY_MAX_OCCUPANCY)));
         sz.setLocation(new GeoPtMessage().setLat(c.getDouble(c.getColumnIndexOrThrow(KEY_LAT))).setLon(c.getDouble(c.getColumnIndexOrThrow(KEY_LON))));
         sz.setExtraInfo(c.getString(c.getColumnIndexOrThrow(KEY_EXTRA)));
+        sz.setIsUserCreated(c.getInt(c.getColumnIndexOrThrow(KEY_USERCREATED)) != 0); // If the integer doesn't equal 0 it is true. Else false
 
         Hours h = new Hours();
         h.setMonOpen(c.getString(c.getColumnIndexOrThrow(KEY_MON_OPEN)));
@@ -272,9 +277,9 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
                 for (SafeZone sz : list){
                     SafeZoneSQLHelper.this._addSafeZone(sz);
                 }
-            }
 
-            Log.i(MapActivity.TAG, "Saved all SafeZones to SQLite.");
+                Log.i(MapActivity.TAG, String.format("Saved %d SafeZones to SQLite.", list.size()));
+            }
 
             return null;
         }
@@ -316,7 +321,7 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
                 return;
             }
 
-            Log.i(MapActivity.TAG, "SafeZones loaded from SQLite.");
+            Log.i(MapActivity.TAG, String.format("%d SafeZones loaded from SQLite.", result.size()));
 
             SafeZoneSQLHelper.this.safeZonesLoadedListener.onSafeZonesLoaded(result);
         }

@@ -41,192 +41,203 @@ import java.util.Calendar;
 @SuppressWarnings("javadoc")
 public final class SafeZone extends com.google.api.client.json.GenericJson {
 
-  /**
-   * The value may be {@code null}.
-   */
-  @com.google.api.client.util.Key("extra_info")
-  private String extraInfo;
+    /**
+     * The value may be {@code null}.
+     */
+    @com.google.api.client.util.Key("extra_info")
+    private String extraInfo;
 
-  /**
-   * The value may be {@code null}.
-   */
-  @com.google.api.client.util.Key
-  private Hours hours;
+    /**
+     * The value may be {@code null}.
+     */
+    @com.google.api.client.util.Key
+    private Hours hours;
 
-  /**
-   * The value may be {@code null}.
-   */
-  @com.google.api.client.util.Key @com.google.api.client.json.JsonString
-  private Long id;
+    /**
+     * The value may be {@code null}.
+     */
+    @com.google.api.client.util.Key @com.google.api.client.json.JsonString
+    private Long id;
 
-  /**
-   * ProtoRPC container for GeoPt instances. Attributes: lat: Float; The latitude of the point. lon:
-   * Float; The longitude of the point.
-   * The value may be {@code null}.
-   */
-  @com.google.api.client.util.Key
-  private GeoPtMessage location;
+    /**
+     * ProtoRPC container for GeoPt instances. Attributes: lat: Float; The latitude of the point. lon:
+     * Float; The longitude of the point.
+     * The value may be {@code null}.
+     */
+    @com.google.api.client.util.Key
+    private GeoPtMessage location;
 
-  /**
-   * The value may be {@code null}.
-   */
-  @com.google.api.client.util.Key("max_occupancy") @com.google.api.client.json.JsonString
-  private Long maxOccupancy;
+    /**
+     * The value may be {@code null}.
+     */
+    @com.google.api.client.util.Key("max_occupancy") @com.google.api.client.json.JsonString
+    private Long maxOccupancy;
 
-  /**
-   * The value may be {@code null}.
-   */
-  @com.google.api.client.util.Key @com.google.api.client.json.JsonString
-  private Long occupancy;
+    /**
+     * The value may be {@code null}.
+     */
+    @com.google.api.client.util.Key @com.google.api.client.json.JsonString
+    private Long occupancy;
 
-  /**
-   * The value may be {@code null}.
-   */
-  @com.google.api.client.util.Key
-  private String phone;
+    /**
+     * The value may be {@code null}.
+     */
+    @com.google.api.client.util.Key
+    private String phone;
 
-  /**
-   * The value may be {@code null}.
-   */
-  @com.google.api.client.util.Key
-  private String title;
+    /**
+     * The value may be {@code null}.
+     */
+    @com.google.api.client.util.Key
+    private String title;
 
-  /**
-   * @return value or {@code null} for none
-   */
-  public String getExtraInfo() {
-    return extraInfo;
-  }
+    /**
+     * @return value or {@code null} for none
+     */
+    public String getExtraInfo() {
+        return extraInfo;
+    }
 
-  /**
-   * @param extraInfo extraInfo or {@code null} for none
-   */
-  public SafeZone setExtraInfo(String extraInfo) {
-    this.extraInfo = extraInfo;
-    return this;
-  }
+    /**
+     * @param extraInfo extraInfo or {@code null} for none
+     */
+    public SafeZone setExtraInfo(String extraInfo) {
+        this.extraInfo = extraInfo;
+        return this;
+    }
 
-  /**
-   * @return value or {@code null} for none
-   */
-  public Hours getHours() {
-    return hours;
-  }
+    /**
+     * @return value or {@code null} for none
+     */
+    public Hours getHours() {
+        return hours;
+    }
 
-  /**
-   * @param hours hours or {@code null} for none
-   */
-  public SafeZone setHours(Hours hours) {
-    this.hours = hours;
-    return this;
-  }
+    /**
+     * @param hours hours or {@code null} for none
+     */
+    public SafeZone setHours(Hours hours) {
+        this.hours = hours;
+        return this;
+    }
 
-  /**
-   * @return value or {@code null} for none
-   */
-  public Long getId() {
-    return id;
-  }
+    /**
+     * @return value or {@code null} for none
+     */
+    public Long getId() {
+        return id;
+    }
 
-  /**
-   * @param id id or {@code null} for none
-   */
-  public SafeZone setId(Long id) {
-    this.id = id;
-    return this;
-  }
+    /**
+     * @param id id or {@code null} for none
+     */
+    public SafeZone setId(Long id) {
+        this.id = id;
+        return this;
+    }
 
-  /**
-   * ProtoRPC container for GeoPt instances. Attributes: lat: Float; The latitude of the point. lon:
-   * Float; The longitude of the point.
-   * @return value or {@code null} for none
-   */
-  public GeoPtMessage getLocation() {
-    return location;
-  }
+    /**
+     * ProtoRPC container for GeoPt instances. Attributes: lat: Float; The latitude of the point. lon:
+     * Float; The longitude of the point.
+     * @return value or {@code null} for none
+     */
+    public GeoPtMessage getLocation() {
+        return location;
+    }
 
-  /**
-   * ProtoRPC container for GeoPt instances. Attributes: lat: Float; The latitude of the point. lon:
-   * Float; The longitude of the point.
-   * @param location location or {@code null} for none
-   */
-  public SafeZone setLocation(GeoPtMessage location) {
-    this.location = location;
-    return this;
-  }
+    /**
+     * ProtoRPC container for GeoPt instances. Attributes: lat: Float; The latitude of the point. lon:
+     * Float; The longitude of the point.
+     * @param location location or {@code null} for none
+     */
+    public SafeZone setLocation(GeoPtMessage location) {
+        this.location = location;
+        return this;
+    }
 
-  /**
-   * @return value or {@code null} for none
-   */
-  public Long getMaxOccupancy() {
-    return maxOccupancy;
-  }
+    /**
+     * @return value or {@code null} for none
+     */
+    public Long getMaxOccupancy() {
+        return maxOccupancy;
+    }
 
-  /**
-   * @param maxOccupancy maxOccupancy or {@code null} for none
-   */
-  public SafeZone setMaxOccupancy(Long maxOccupancy) {
-    this.maxOccupancy = maxOccupancy;
-    return this;
-  }
+    /**
+     * @param maxOccupancy maxOccupancy or {@code null} for none
+     */
+    public SafeZone setMaxOccupancy(Long maxOccupancy) {
+        this.maxOccupancy = maxOccupancy;
+        return this;
+    }
 
-  /**
-   * @return value or {@code null} for none
-   */
-  public Long getOccupancy() {
-    return occupancy;
-  }
+    /**
+     * @return value or {@code null} for none
+     */
+    public Long getOccupancy() {
+        return occupancy;
+    }
 
-  /**
-   * @param occupancy occupancy or {@code null} for none
-   */
-  public SafeZone setOccupancy(Long occupancy) {
-    this.occupancy = occupancy;
-    return this;
-  }
+    /**
+     * @param occupancy occupancy or {@code null} for none
+     */
+    public SafeZone setOccupancy(Long occupancy) {
+        this.occupancy = occupancy;
+        return this;
+    }
 
-  /**
-   * @return value or {@code null} for none
-   */
-  public String getPhone() {
-    return phone;
-  }
+    /**
+     * @return value or {@code null} for none
+     */
+    public String getPhone() {
+        return phone;
+    }
 
-  /**
-   * @param phone phone or {@code null} for none
-   */
-  public SafeZone setPhone(String phone) {
-    this.phone = phone;
-    return this;
-  }
+    /**
+     * @param phone phone or {@code null} for none
+     */
+    public SafeZone setPhone(String phone) {
+        this.phone = phone;
+        return this;
+    }
 
-  /**
-   * @return value or {@code null} for none
-   */
-  public String getTitle() {
-    return title;
-  }
+    /**
+     * @return value or {@code null} for none
+     */
+    public String getTitle() {
+        return title;
+    }
 
-  /**
-   * @param title title or {@code null} for none
-   */
-  public SafeZone setTitle(String title) {
-    this.title = title;
-    return this;
-  }
+    /**
+     * @param title title or {@code null} for none
+     */
+    public SafeZone setTitle(String title) {
+        this.title = title;
+        return this;
+    }
 
-  @Override
-  public SafeZone set(String fieldName, Object value) {
-    return (SafeZone) super.set(fieldName, value);
-  }
+    @Override
+    public SafeZone set(String fieldName, Object value) {
+        return (SafeZone) super.set(fieldName, value);
+    }
 
-  @Override
-  public SafeZone clone() {
-    return (SafeZone) super.clone();
-  }
+    @Override
+    public SafeZone clone() {
+        return (SafeZone) super.clone();
+    }
 
 
-  /************ Added Manually: Helper Methods since this is my new main model **********************/
+    /************ Added Manually: Helper Methods since this is my new main model **********************/
+
+    // set the isUserCreated field to false by default.
+    private boolean isUserCreated = false;
+
+    public boolean isUserCreated() {
+        return isUserCreated;
+    }
+
+    public void setIsUserCreated(boolean isUserCreated){
+        this.isUserCreated = isUserCreated;
+    }
 
     public boolean hasPhone() {
         return (this.getPhone() != null);

@@ -161,6 +161,7 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
             if (s.getLocation() != null){
                 mMap.addMarker(s.generateMarkerOptions());
             }
+
         }
     }
 
@@ -360,7 +361,7 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
                 return;
             }
 
-            Log.i(MapActivity.TAG, "SafeZones loaded from Endpoints.");
+            Log.i(MapActivity.TAG, String.format("%d SafeZones loaded from Endpoints.", list.size()));
 
             // This will launch an Async task that saves all the SafeZones to the db
             SQLhelper.addSafeZones(list);
