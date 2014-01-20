@@ -55,6 +55,10 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
 
     private SafeZoneSQLHelper SQLhelper;
 
+    public SafeZoneSQLHelper getSQLHelper() {
+        return this.SQLhelper;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -323,8 +327,8 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         Vibrator v = (Vibrator) getSystemService(this.VIBRATOR_SERVICE);
         v.vibrate(50);
 
-        // TODO: Launch create new SafeZone dialog with lat/long prefilled
-
+        // Launch new SafeZone dialog with lat/long prefilled
+        new AddSafeZoneDialogFragment(latLng).show(getFragmentManager(), AddSafeZoneDialogFragment.TAG);
 
         Log.i(MapActivity.TAG, String.format("User long pressed on location with lat=%f long=%f", latLng.latitude, latLng.longitude));
     }

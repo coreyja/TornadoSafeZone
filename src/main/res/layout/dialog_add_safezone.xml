@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dialog_add_safezone_title"
+        android:hint="@string/dialog_add_safezone_title_hint"
+        android:textSize="20sp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:id="@+id/dialog_add_safezone_latitude"
+        android:hint="@string/dialog_add_safezone_latitude_hint" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:id="@+id/dialog_add_safezone_longitude"
+        android:hint="@string/dialog_add_safezone_longitude_hint" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:id="@+id/dialog_add_safezone_current_capacity"
+        android:hint="@string/dialog_add_safezone_current_capacity_hint" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:id="@+id/dialog_add_safezone_max_capacity"
+        android:hint="@string/dialog_add_safezone_max_capacity_hint"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:id="@+id/dialog_add_safezone_phone"
+        android:hint="@string/dialog_add_safezone_phone_hint" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:id="@+id/dialog_add_safezone_extra"
+        android:hint="@string/dialog_add_safezone_extra_hint" />
+
+
+</LinearLayout>

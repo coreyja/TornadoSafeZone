@@ -20,6 +20,7 @@
     <string name="occupancy_90">This SafeZone is currently over 90% full.</string>
     <string name="occupancy_100">This SafeZone is currently completely full.</string>
 
+    <string name="string_cancel">Cancel</string>
 
     <string name="about_idea_by">App Idea by Team Storm:</string>
     <string name="about_development_by">App Development by Corey Alexander</string>
@@ -36,5 +37,17 @@
     <string name="menu_dev_empty_table">Empty SQLite Table</string>
     <string name="menu_dev_refresh">Refresh SafeZones from Server</string>
     <string name="menu_dev_load_sql">Load from SQLite DB</string>
+
+    <string name="dialog_add_safezone_title_hint">SafeZone Title</string>
+    <string name="dialog_add_safezone_current_capacity_hint">Current Capacity</string>
+    <string name="dialog_add_safezone_max_capacity_hint">Max Capacity</string>
+    <string name="dialog_add_safezone_phone_hint">Phone Number</string>
+    <string name="dialog_add_safezone_extra_hint">Extra Information</string>
+    <string name="dialog_add_safezone_title">Add new personal SafeZone</string>
+
+    <string name="dialog_add_safezone_positive_text">Add SafeZone</string>
+    <string name="dialog_add_safezone_neutral_text">Add SafeZone</string>
+    <string name="dialog_add_safezone_latitude_hint">Latitude</string>
+    <string name="dialog_add_safezone_longitude_hint">Longitude</string>
 
 </resources>

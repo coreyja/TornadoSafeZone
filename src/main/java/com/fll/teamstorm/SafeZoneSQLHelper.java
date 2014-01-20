@@ -150,20 +150,23 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
         rowValues.put(KEY_EXTRA, sz.getExtraInfo());
         rowValues.put(KEY_USERCREATED, sz.isUserCreated());
 
-        rowValues.put(KEY_MON_OPEN, sz.getHours().getMonOpen());
-        rowValues.put(KEY_MON_CLOSE, sz.getHours().getMonClose());
-        rowValues.put(KEY_TUE_OPEN, sz.getHours().getTueOpen());
-        rowValues.put(KEY_TUE_CLOSE, sz.getHours().getTueClose());
-        rowValues.put(KEY_WED_OPEN, sz.getHours().getWedOpen());
-        rowValues.put(KEY_WED_CLOSE, sz.getHours().getWedClose());
-        rowValues.put(KEY_THUR_OPEN, sz.getHours().getThursOpen());
-        rowValues.put(KEY_THUR_CLOSE, sz.getHours().getThursClose());
-        rowValues.put(KEY_FRI_OPEN, sz.getHours().getFriOpen());
-        rowValues.put(KEY_FRI_CLOSE, sz.getHours().getFriClose());
-        rowValues.put(KEY_SAT_OPEN, sz.getHours().getSatOpen());
-        rowValues.put(KEY_SAT_CLOSE, sz.getHours().getSatClose());
-        rowValues.put(KEY_SUN_OPEN, sz.getHours().getSunOpen());
-        rowValues.put(KEY_SUN_CLOSE, sz.getHours().getSunClose());
+        // Only save the hours if an Hours object exists
+        if (sz.hasHours()){
+            rowValues.put(KEY_MON_OPEN, sz.getHours().getMonOpen());
+            rowValues.put(KEY_MON_CLOSE, sz.getHours().getMonClose());
+            rowValues.put(KEY_TUE_OPEN, sz.getHours().getTueOpen());
+            rowValues.put(KEY_TUE_CLOSE, sz.getHours().getTueClose());
+            rowValues.put(KEY_WED_OPEN, sz.getHours().getWedOpen());
+            rowValues.put(KEY_WED_CLOSE, sz.getHours().getWedClose());
+            rowValues.put(KEY_THUR_OPEN, sz.getHours().getThursOpen());
+            rowValues.put(KEY_THUR_CLOSE, sz.getHours().getThursClose());
+            rowValues.put(KEY_FRI_OPEN, sz.getHours().getFriOpen());
+            rowValues.put(KEY_FRI_CLOSE, sz.getHours().getFriClose());
+            rowValues.put(KEY_SAT_OPEN, sz.getHours().getSatOpen());
+            rowValues.put(KEY_SAT_CLOSE, sz.getHours().getSatClose());
+            rowValues.put(KEY_SUN_OPEN, sz.getHours().getSunOpen());
+            rowValues.put(KEY_SUN_CLOSE, sz.getHours().getSunClose());
+        }
 
         return rowValues;
     }
@@ -211,9 +214,12 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
     }
 
     private long _addSafeZone(SafeZone sz){
+        if (sz == null) return -1;
         ContentValues vals = getContentValuesFromSafeZone(sz);
 
-        this._deleteSafeZone(sz.getId());
+        if (sz.getId() != null){ // If an id exists try deleting it first
+            this._deleteSafeZone(sz.getId());
+        }
         return this.db.insert(TABLE_NAME, null, vals);
     }
 
@@ -245,11 +251,16 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
     }
 
     public void addSafeZone(SafeZone sz){
+        // Don't refresh the SafeZone's after a save by default.
+        this.addSafeZone(sz, false);
+    }
+
+    public void addSafeZone(SafeZone sz, boolean loadFromSQLiteAfterSave){
         // Make a new ArrayList with the one SafeZone so we can use the Async that is already written
         ArrayList<SafeZone> list = new ArrayList<SafeZone>();
         list.add(sz);
 
-        new SaveSafeZonesToSQLite().execute(list);
+        new SaveSafeZonesToSQLite(loadFromSQLiteAfterSave).execute(list);
     }
 
     public long[] addSafeZones(List<SafeZone> zones){
@@ -267,6 +278,16 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
     /********* Async Task Classes *********/
 
     class SaveSafeZonesToSQLite extends AsyncTask<List<SafeZone>, Void, Void> {
+        private boolean loadFromSQLiteAfterSave = false; // Defaults to false unless given in constructor
+
+        public SaveSafeZonesToSQLite() {
+            super();
+        }
+
+        // Constructor to save loadFromSQLiteAfterSave if one is given
+        public SaveSafeZonesToSQLite(boolean loadFromSQLiteAfterSave){
+            this.loadFromSQLiteAfterSave = loadFromSQLiteAfterSave;
+        }
 
         @Override
         protected Void doInBackground(List<SafeZone>... lists) {
@@ -279,6 +300,11 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
                 }
 
                 Log.i(MapActivity.TAG, String.format("Saved %d SafeZones to SQLite.", list.size()));
+
+                // Conditionally load from SQLite if told to in constructor
+                if (loadFromSQLiteAfterSave) {
+                    loadSafeZones();
+                }
             }
 
             return null;
