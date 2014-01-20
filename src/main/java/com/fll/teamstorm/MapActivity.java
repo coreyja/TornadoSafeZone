@@ -10,6 +10,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -38,7 +39,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter, GooglePlayServicesClient.ConnectionCallbacks,
-        GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.OnInfoWindowClickListener, OnSafeZonesLoadedListener {
+        GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.OnInfoWindowClickListener, OnSafeZonesLoadedListener, GoogleMap.OnMapLongClickListener {
 
     public static final String TAG = "FLL-TS";
 
@@ -71,6 +72,7 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         mMap.setMyLocationEnabled(true);
         mMap.setInfoWindowAdapter(this);
         mMap.setOnInfoWindowClickListener(this);
+        mMap.setOnMapLongClickListener(this);
 
         // Set up the LocationClient. This is to auto-zoom when location is available
         this.mLocationClient = new LocationClient(this, this, this);
@@ -309,6 +311,21 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
 
         // Refresh the markers on the map
         this.refreshMarkers();
+    }
+
+    /********* OnMapLongClickListener *********/
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+
+        // Vibrate for 50 milliseconds.
+        Vibrator v = (Vibrator) getSystemService(this.VIBRATOR_SERVICE);
+        v.vibrate(50);
+
+        // TODO: Launch create new SafeZone dialog with lat/long prefilled
+
+
+        Log.i(MapActivity.TAG, String.format("User long pressed on location with lat=%f long=%f", latLng.latitude, latLng.longitude));
     }
 
     /********* Async Task Classes *********/
