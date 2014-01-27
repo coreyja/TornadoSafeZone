@@ -74,5 +74,7 @@
     <string name="string_sunday">Sunday</string>
     <string name="dialog_hours_title">Edit Hours</string>
     <string name="dialog_hours_positive">Save SafeZone</string>
+    <string name="list_show_local">Show Local SafeZones</string>
+    <string name="list_show_global">Show Global SafeZones</string>
 
 </resources>

@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -35,6 +36,8 @@ public class ListCustomSafeZoneActivity extends ListActivity implements SafeZone
 
     private SafeZoneArrayAdapter adapter;
 
+    private CheckBox showLocal, showGlobal;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +53,21 @@ public class ListCustomSafeZoneActivity extends ListActivity implements SafeZone
         // Set up addressHelper
         this.addressHelper = new AddressToLatLngHelper(this);
 
+        // Set up checkboxes
+        this.showLocal = (CheckBox) findViewById(R.id.list_show_local);
+        this.showGlobal = (CheckBox) findViewById(R.id.list_show_global);
+
+        // Create the onClick listener for the Checkboxes and assign it to them.
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ListCustomSafeZoneActivity.this.loadSafeZones();
+            }
+        };
+
+        this.showLocal.setOnClickListener(listener);
+        this.showGlobal.setOnClickListener(listener);
+
         ListView list = getListView();
         list.setOnItemLongClickListener(this);
     }
@@ -63,7 +81,7 @@ public class ListCustomSafeZoneActivity extends ListActivity implements SafeZone
 
         // Open the SQLite helper
         this.sqlAsync.open();
-        this.sqlAsync.loadCustomSafeZones();
+        this.loadSafeZones();
     }
 
     /*
@@ -115,8 +133,21 @@ public class ListCustomSafeZoneActivity extends ListActivity implements SafeZone
 
     @Override
     public void loadSafeZones(){
-        // Load all the SafeZones since we are on the Map.
-        this.sqlAsync.loadCustomSafeZones();
+        boolean local = this.showLocal.isChecked();
+        boolean global = this.showGlobal.isChecked();
+
+        // Load the SafeZones that are requested
+        if (local && global) {
+            this.sqlAsync.loadSafeZones();
+        } else if (local) {
+            this.sqlAsync.loadCustomSafeZones();
+        } else if (global) {
+            this.sqlAsync.loadGlobalSafeZones();
+        } else {
+            this.safezones.clear();
+            this.adapter.notifyDataSetChanged();
+        }
+
     }
 
     @Override
