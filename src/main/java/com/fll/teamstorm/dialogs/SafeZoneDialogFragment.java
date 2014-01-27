@@ -1,4 +1,4 @@
-package com.fll.teamstorm;
+package com.fll.teamstorm.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,9 +13,8 @@ import android.widget.EditText;
 
 import com.appspot.perfect_atrium_421.safezones.model.GeoPtMessage;
 import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
-import com.google.android.gms.maps.model.LatLng;
-
-import java.util.Map;
+import com.fll.teamstorm.R;
+import com.fll.teamstorm.SQL.SafeZoneSQLAsync;
 
 /**
  * Created by coreyja on 1/19/14.

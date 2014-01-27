@@ -1,4 +1,4 @@
-package com.fll.teamstorm;
+package com.fll.teamstorm.SQL;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -11,6 +11,7 @@ import android.util.Log;
 import com.appspot.perfect_atrium_421.safezones.model.GeoPtMessage;
 import com.appspot.perfect_atrium_421.safezones.model.Hours;
 import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
+import com.fll.teamstorm.MapActivity;
 
 import java.util.ArrayList;
 import java.util.List;

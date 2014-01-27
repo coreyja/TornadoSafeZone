@@ -1,12 +1,11 @@
-package com.fll.teamstorm;
+package com.fll.teamstorm.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.widget.EditText;
 
 import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
-import com.google.android.gms.maps.model.LatLng;
+import com.fll.teamstorm.R;
 
 /**
  * Created by coreyja on 1/27/14.
