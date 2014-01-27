@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
+import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
@@ -25,6 +26,8 @@ public class SafeZoneArrayAdapter extends ArrayAdapter<SafeZone> {
 
     private List<SafeZone> safezones;
 
+    private LocationClient locationClient;
+
 
     public SafeZoneArrayAdapter(Context context, int layoutID, List<SafeZone> objects) {
         super(context, layoutID, objects);
@@ -33,6 +36,10 @@ public class SafeZoneArrayAdapter extends ArrayAdapter<SafeZone> {
         this.layoutID = layoutID;
 
         this.safezones = objects;
+    }
+
+    public void setLocationClient(LocationClient lc) {
+        this.locationClient = lc;
     }
 
     @Override
@@ -53,6 +60,12 @@ public class SafeZoneArrayAdapter extends ArrayAdapter<SafeZone> {
         ((TextView) convertView.findViewById(R.id.list_item_title)).setText(sz.getTitle());
         ((TextView) convertView.findViewById(R.id.list_item_phone)).setText(sz.getPhone());
 
+        // Calculate and display the current distance from this SafeZone
+        Location loc = this.locationClient.getLastLocation();
+        LatLng dest = new LatLng(sz.getLocation().getLat(), sz.getLocation().getLon());
+
+        double miles = Utils.kmToMiles(Utils.distanceBetweenPoints(loc, dest));
+        ((TextView)convertView.findViewById(R.id.list_item_dist)).setText(context.getString(R.string.info_format_dist_away, miles));
 
         return convertView;
     }

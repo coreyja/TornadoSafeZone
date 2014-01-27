@@ -22,12 +22,15 @@ import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
 import com.fll.teamstorm.SQL.SafeZoneSQLAsync;
 import com.fll.teamstorm.dialogs.AddressDialog;
 import com.fll.teamstorm.dialogs.SafeZoneDialogFragment;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListSafeZoneActivity extends ListActivity implements SafeZonesLoadedListener, SafeZoneDialogFragment.HasSQLAsync, AdapterView.OnItemLongClickListener {
+public class ListSafeZoneActivity extends ListActivity implements SafeZonesLoadedListener, SafeZoneDialogFragment.HasSQLAsync, AdapterView.OnItemLongClickListener, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
 
     private SafeZoneSQLAsync sqlAsync;
     private List<SafeZone> safezones = new ArrayList<SafeZone>(); // Init it to an empty list
@@ -35,6 +38,10 @@ public class ListSafeZoneActivity extends ListActivity implements SafeZonesLoade
     private SafeZoneArrayAdapter adapter;
 
     private CheckBox showLocal, showGlobal;
+
+    private LocationClient mLocationClient;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +51,12 @@ public class ListSafeZoneActivity extends ListActivity implements SafeZonesLoade
         // Set up the SQLite helper
         this.sqlAsync = new SafeZoneSQLAsync(this, this);
 
+        // Set up the LocationClient. This is to auto-zoom when location is available
+        this.mLocationClient = new LocationClient(this, this, this);
+
         // Set up the adapter
         this.adapter = new SafeZoneArrayAdapter(this, R.layout.list_item_safe_zone, safezones);
+        this.adapter.setLocationClient(this.mLocationClient);
         setListAdapter(this.adapter);
 
         // Set up checkboxes
@@ -65,6 +76,8 @@ public class ListSafeZoneActivity extends ListActivity implements SafeZonesLoade
 
         ListView list = getListView();
         list.setOnItemLongClickListener(this);
+
+
     }
 
     /*
@@ -77,6 +90,9 @@ public class ListSafeZoneActivity extends ListActivity implements SafeZonesLoade
         // Open the SQLite helper
         this.sqlAsync.open();
         this.loadSafeZones();
+
+        // Connect the client.
+        mLocationClient.connect();
     }
 
     /*
@@ -86,6 +102,9 @@ public class ListSafeZoneActivity extends ListActivity implements SafeZonesLoade
     protected void onStop() {
         // Close the SQLite helper
         this.sqlAsync.close();
+
+        // Close the client.
+        mLocationClient.disconnect();
 
         super.onStop();
     }
@@ -169,6 +188,22 @@ public class ListSafeZoneActivity extends ListActivity implements SafeZonesLoade
         return true;
     }
 
+    /*** GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener ***/
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+    }
+
+    @Override
+    public void onDisconnected() {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
 
 
     private class DeleteSafeZoneDialog extends DialogFragment {

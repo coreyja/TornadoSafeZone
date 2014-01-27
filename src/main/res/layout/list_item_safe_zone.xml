@@ -21,5 +21,12 @@
         android:id="@+id/list_item_phone"
         android:layout_margin="10dp" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SafeZone distance"
+        android:id="@+id/list_item_dist"
+        android:layout_margin="10dp"
+        android:textSize="12sp"/>
 
 </LinearLayout>
