@@ -3,6 +3,7 @@ package com.fll.teamstorm;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.app.ListActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,14 +12,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.ListView;
 
 import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ListCustomSafeZoneActivity extends Activity implements OnSafeZonesLoadedListener{
+public class ListCustomSafeZoneActivity extends ListActivity implements OnSafeZonesLoadedListener{
 
     private SafeZoneSQLAsync sqlAsync;
+    private List<SafeZone> safezones = new ArrayList<SafeZone>(); // Init it to an empty list
+
+    private SafeZoneArrayAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +33,10 @@ public class ListCustomSafeZoneActivity extends Activity implements OnSafeZonesL
 
         // Set up the SQLite helper
         this.sqlAsync = new SafeZoneSQLAsync(this, this);
+
+        // Set up the adapter
+        this.adapter = new SafeZoneArrayAdapter(this, R.layout.list_item_safe_zone, safezones);
+        setListAdapter(this.adapter);
     }
 
     /*
@@ -77,7 +87,19 @@ public class ListCustomSafeZoneActivity extends Activity implements OnSafeZonesL
     @Override
     public void onSafeZonesLoaded(List<SafeZone> zones) {
 
-        // TODO: Update the ListView thingy
-        Log.i(MapActivity.TAG,String.format("%d SafeZones loaded by ListCustomSZ Activity", zones.size()));
+
+        this.safezones.clear();
+        this.safezones.addAll(zones);
+        this.adapter.notifyDataSetChanged();
+
+        Log.i(MapActivity.TAG,String.format("%d SafeZones loaded by ListCustomSZ Activity", this.adapter.getCount()));
+
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        SafeZone sz = (SafeZone) this.getListAdapter().getItem(position);
+
+        Log.i(MapActivity.TAG, String.format("Title:%s", sz.getTitle()));
     }
 }
