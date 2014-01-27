@@ -2,6 +2,7 @@ package com.fll.teamstorm;
 
 import android.app.Activity;
 import android.content.Context;
+import android.location.Location;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
@@ -50,6 +52,7 @@ public class SafeZoneArrayAdapter extends ArrayAdapter<SafeZone> {
 
         ((TextView) convertView.findViewById(R.id.list_item_title)).setText(sz.getTitle());
         ((TextView) convertView.findViewById(R.id.list_item_phone)).setText(sz.getPhone());
+
 
         return convertView;
     }
