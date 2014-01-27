@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.fll.teamstorm.MapActivity">
 
-    <item android:id="@+id/menu_map_view_custom_sz"
-        android:title="@string/menu_map_view_custom_sz"
+    <item android:id="@+id/menu_map_list_sz"
+        android:title="@string/menu_map_list_sz"
         android:orderInCategory="100"
         android:showAsAction="never" />
 

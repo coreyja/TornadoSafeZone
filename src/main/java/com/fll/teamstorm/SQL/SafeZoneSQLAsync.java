@@ -86,9 +86,9 @@ public class SafeZoneSQLAsync {
         new LoadAllSafeZones().execute();
     }
 
-    // Runs an Async tasks which loads all the Custom SafeZone's and pass them to the listener
-    public void loadCustomSafeZones() {
-        new LoadCustomSafeZones().execute();
+    // Runs an Async tasks which loads all the Local SafeZone's and pass them to the listener
+    public void loadLocalSafeZones() {
+        new LoadLocalSafeZones().execute();
     }
 
     // Runs an Async tasks which loads all the Global SafeZone's and pass them to the listener
@@ -184,13 +184,13 @@ public class SafeZoneSQLAsync {
         }
     }
 
-    // Get all the Custom SafeZones in the SQLite DB and pass the list along to the OnSafeZoneLoadedListener
-    private class LoadCustomSafeZones extends AsyncTask<Void, Void, List<SafeZone>>{
+    // Get all the Local SafeZones in the SQLite DB and pass the list along to the OnSafeZoneLoadedListener
+    private class LoadLocalSafeZones extends AsyncTask<Void, Void, List<SafeZone>>{
 
         @Override
         protected List<SafeZone> doInBackground(Void... voids) {
 
-            return SafeZoneSQLAsync.this.sqlHelper.getCustomSafeZones();
+            return SafeZoneSQLAsync.this.sqlHelper.getLocalSafeZones();
         }
 
         @Override
@@ -204,14 +204,14 @@ public class SafeZoneSQLAsync {
                 return;
             }
 
-            Log.i(MapActivity.TAG, String.format("%d Custom SafeZones loaded from SQLite.", result.size()));
+            Log.i(MapActivity.TAG, String.format("%d Local SafeZones loaded from SQLite.", result.size()));
 
-            // If we are loading Custom SafeZones this will most likely return to the ListCustomSZ activity
+            // If we are loading Local SafeZones this will most likely return to the ListSZ activity
             SafeZoneSQLAsync.this.safeZonesLoadedListener.onSafeZonesLoaded(result);
         }
     }
 
-    // Get all the Custom SafeZones in the SQLite DB and pass the list along to the OnSafeZoneLoadedListener
+    // Get all the Global SafeZones in the SQLite DB and pass the list along to the OnSafeZoneLoadedListener
     private class LoadGlobalSafeZones extends AsyncTask<Void, Void, List<SafeZone>>{
 
         @Override
@@ -231,9 +231,9 @@ public class SafeZoneSQLAsync {
                 return;
             }
 
-            Log.i(MapActivity.TAG, String.format("%d Custom SafeZones loaded from SQLite.", result.size()));
+            Log.i(MapActivity.TAG, String.format("%d Local SafeZones loaded from SQLite.", result.size()));
 
-            // If we are loading Custom SafeZones this will most likely return to the ListCustomSZ activity
+            // If we are loading Local SafeZones this will most likely return to the ListSZ activity
             SafeZoneSQLAsync.this.safeZonesLoadedListener.onSafeZonesLoaded(result);
         }
     }

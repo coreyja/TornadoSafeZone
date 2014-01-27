@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.fll.teamstorm.ListCustomSafeZoneActivity" >
+    tools:context="com.fll.teamstorm.ListSafeZoneActivity" >
     
     <item android:id="@+id/menu_list_new_safe_zone"
         android:title="@string/menu_list_new_safe_zone"

@@ -51,8 +51,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.fll.teamstorm.ListCustomSafeZoneActivity"
-            android:label="@string/title_activity_list_custom_safe_zone" >
+            android:name=".ListSafeZoneActivity"
+            android:label="@string/title_activity_list_safe_zone" >
         </activity>
     </application>
 

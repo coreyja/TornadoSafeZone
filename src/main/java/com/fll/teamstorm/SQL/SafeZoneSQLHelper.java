@@ -251,7 +251,7 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    public ArrayList<SafeZone> getCustomSafeZones() {
+    public ArrayList<SafeZone> getLocalSafeZones() {
         ArrayList<SafeZone> list = new ArrayList<SafeZone>();
 
         String clause = KEY_USERCREATED + "=?";

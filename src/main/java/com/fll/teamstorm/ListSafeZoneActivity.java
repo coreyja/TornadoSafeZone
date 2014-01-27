@@ -26,7 +26,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListCustomSafeZoneActivity extends ListActivity implements SafeZonesLoadedListener, SafeZoneDialogFragment.HasSQLAsync, AdapterView.OnItemLongClickListener,
+public class ListSafeZoneActivity extends ListActivity implements SafeZonesLoadedListener, SafeZoneDialogFragment.HasSQLAsync, AdapterView.OnItemLongClickListener,
         AddressToLatLngHelper.OnLatLngFound {
 
     private SafeZoneSQLAsync sqlAsync;
@@ -41,7 +41,7 @@ public class ListCustomSafeZoneActivity extends ListActivity implements SafeZone
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_custom_safe_zone);
+        setContentView(R.layout.activity_list_safe_zone);
 
         // Set up the SQLite helper
         this.sqlAsync = new SafeZoneSQLAsync(this, this);
@@ -61,7 +61,7 @@ public class ListCustomSafeZoneActivity extends ListActivity implements SafeZone
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ListCustomSafeZoneActivity.this.loadSafeZones();
+                ListSafeZoneActivity.this.loadSafeZones();
             }
         };
 
@@ -100,7 +100,7 @@ public class ListCustomSafeZoneActivity extends ListActivity implements SafeZone
     public boolean onCreateOptionsMenu(Menu menu) {
         
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.list_custom_safe_zone, menu);
+        getMenuInflater().inflate(R.menu.list_safe_zone, menu);
         return true;
     }
 
@@ -127,7 +127,7 @@ public class ListCustomSafeZoneActivity extends ListActivity implements SafeZone
         this.safezones.addAll(zones);
         this.adapter.notifyDataSetChanged();
 
-        Log.i(MapActivity.TAG, String.format("%d SafeZones loaded by ListCustomSZ Activity", this.adapter.getCount()));
+        Log.i(MapActivity.TAG, String.format("%d SafeZones loaded by ListSZ Activity", this.adapter.getCount()));
 
     }
 
@@ -140,7 +140,7 @@ public class ListCustomSafeZoneActivity extends ListActivity implements SafeZone
         if (local && global) {
             this.sqlAsync.loadSafeZones();
         } else if (local) {
-            this.sqlAsync.loadCustomSafeZones();
+            this.sqlAsync.loadLocalSafeZones();
         } else if (global) {
             this.sqlAsync.loadGlobalSafeZones();
         } else {
@@ -204,7 +204,7 @@ public class ListCustomSafeZoneActivity extends ListActivity implements SafeZone
             builder.setPositiveButton(getString(R.string.dialog_delete_positive), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    ListCustomSafeZoneActivity.this.getSqlAsync().deleteSafeZone(sz.getId());
+                    ListSafeZoneActivity.this.getSqlAsync().deleteSafeZone(sz.getId());
                 }
             });
 
