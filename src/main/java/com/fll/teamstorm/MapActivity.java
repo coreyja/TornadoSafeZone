@@ -185,6 +185,10 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         return null;
     }
 
+    public SafeZoneSQLAsync getSqlAsync() {
+        return this.sqlAsync;
+    }
+
     /********** GoogleMap.InfoWindowAdapter **********/
 
     @Override

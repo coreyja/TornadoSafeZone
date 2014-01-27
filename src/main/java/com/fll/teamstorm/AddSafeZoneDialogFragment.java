@@ -28,7 +28,7 @@ public class AddSafeZoneDialogFragment extends DialogFragment implements DialogI
 
     private EditText title_field, lat_field, lng_field, curr_cap_field, max_cap_field, phone_field, extra_field;
 
-    private SafeZoneSQLHelper SQLhelper;
+    private SafeZoneSQLAsync sqlAsync;
 
     public AddSafeZoneDialogFragment() {
         super();
@@ -80,7 +80,7 @@ public class AddSafeZoneDialogFragment extends DialogFragment implements DialogI
 
         // Assuming the activity is MapActivity get the SQLHelper
         try {
-            this.SQLhelper = ((MapActivity) activity).getSQLHelper();
+            this.sqlAsync = ((MapActivity) activity).getSqlAsync();
         } catch (Exception e) {
             Log.d(TAG, "Could not get SQLHelper from calling activity.");
         }
@@ -107,6 +107,6 @@ public class AddSafeZoneDialogFragment extends DialogFragment implements DialogI
         // Set the SafeZone as user created
         sz.setIsUserCreated(true);
 
-        this.SQLhelper.addSafeZone(sz, true);
+        this.sqlAsync.addSafeZone(sz, true);
     }
 }
