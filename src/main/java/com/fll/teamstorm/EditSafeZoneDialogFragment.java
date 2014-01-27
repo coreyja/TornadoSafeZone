@@ -13,6 +13,8 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class EditSafeZoneDialogFragment extends SafeZoneDialogFragment {
 
+    public static final String TAG = "SZ-DIALOG-EDIT";
+
     private SafeZone sz;
 
     public EditSafeZoneDialogFragment(SafeZone sz) {
