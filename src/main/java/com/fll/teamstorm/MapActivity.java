@@ -53,11 +53,7 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
 
     private  boolean hasZoomedIntoInitialLocation;
 
-    private SafeZoneSQLHelper SQLhelper;
-
-    public SafeZoneSQLHelper getSQLHelper() {
-        return this.SQLhelper;
-    }
+    private SafeZoneSQLAsync sqlAsync;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +61,7 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         setContentView(R.layout.activity_map);
 
         // Set up the SQLite helper
-        this.SQLhelper = new SafeZoneSQLHelper(MapActivity.this, MapActivity.this);
+        this.sqlAsync = new SafeZoneSQLAsync(MapActivity.this);
 
         // Setup service for Endpoints
         Safezones.Builder builder = new Safezones.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
@@ -96,8 +92,8 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         mLocationClient.connect();
 
         // Open the SQLite helper
-        this.SQLhelper.open();
-        this.SQLhelper.loadSafeZones();
+        this.sqlAsync.open();
+        this.sqlAsync.loadSafeZones();
 
         // Retrieve SafeZones from SQL while Endpoints loads
         this.populateSafeZonesFromEndoints();
@@ -113,7 +109,7 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         mLocationClient.disconnect();
 
         // Close the SQLite helper
-        this.SQLhelper.close();
+        this.sqlAsync.close();
 
         super.onStop();
     }
@@ -133,7 +129,7 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         int id = item.getItemId();
         switch (id){
             case R.id.menu_dev_empty_table:
-                this.SQLhelper.emptyTable();
+                this.sqlAsync.emptyTable();
                 break;
 
             case R.id.menu_dev_refresh:
@@ -141,15 +137,15 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
                 break;
 
             case R.id.menu_dev_load_sql:
-                this.SQLhelper.loadSafeZones();
+                this.sqlAsync.loadSafeZones();
                 break;
 
             case R.id.menu_dev_clear_user_created:
-                this.SQLhelper.clearUserCreated();
+                this.sqlAsync.clearUserCreated();
                 break;
 
             case R.id.menu_dev_clear_not_user_created:
-                this.SQLhelper.clearNotUserCreated();
+                this.sqlAsync.clearNotUserCreated();
                 break;
 
 
@@ -377,10 +373,10 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
 
             // Clear all the not user created.
             // This is so items deleted from the server aren't still on the device
-            SQLhelper.clearNotUserCreated();
+            sqlAsync.clearNotUserCreated();
 
             // This will launch an Async task that saves all the SafeZones to the db. And after the save, load the SZ's from SQLite
-            SQLhelper.addSafeZones(list, true);
+            sqlAsync.addSafeZones(list, true);
         }
     }
 

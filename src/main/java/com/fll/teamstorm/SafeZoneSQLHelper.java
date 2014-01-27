@@ -114,12 +114,8 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
 
     private SQLiteDatabase db;
 
-    private OnSafeZonesLoadedListener safeZonesLoadedListener;
-
-    public SafeZoneSQLHelper(Context context, OnSafeZonesLoadedListener safeZonesLoadedListener) {
+    public SafeZoneSQLHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-
-        this.safeZonesLoadedListener = safeZonesLoadedListener;
     }
 
 
@@ -135,6 +131,14 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
 
         db.execSQL(DROP_STATEMENT);
         onCreate(db);
+    }
+
+    public void open() {
+        this.db = this.getWritableDatabase();
+    }
+
+    public void close() {
+        this.db.close();
     }
 
     // Convert from SafeZone object to a table row
@@ -206,24 +210,24 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
         return sz;
     }
 
-    private int _deleteSafeZone(long id){
+    public int deleteSafeZone(long id){
         String clause = KEY_ID + "=?";
         String args[] = {Long.toString(id)};
 
         return this.db.delete(TABLE_NAME, clause, args);
     }
 
-    private long _addSafeZone(SafeZone sz){
+    public long addSafeZone(SafeZone sz){
         if (sz == null) return -1;
         ContentValues vals = getContentValuesFromSafeZone(sz);
 
         if (sz.getId() != null){ // If an id exists try deleting it first
-            this._deleteSafeZone(sz.getId());
+            this.deleteSafeZone(sz.getId());
         }
         return this.db.insert(TABLE_NAME, null, vals);
     }
 
-    private ArrayList<SafeZone> _getSafeZones() {
+    public ArrayList<SafeZone> getSafeZones() {
         ArrayList<SafeZone> list = new ArrayList<SafeZone>();
 
         Cursor c = db.query(true, TABLE_NAME, PROJECTION, null, null,null,null,null,null);
@@ -237,171 +241,29 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    private void _clearUserCreated() {
+    public void clearUserCreated() {
         String clause = KEY_USERCREATED + "=?";
         String args[] = {Integer.toString(1)};
 
         this.db.delete(TABLE_NAME, clause, args);
     }
 
-    private void _clearNotUserCreated() {
+    public void clearNotUserCreated() {
         String clause = KEY_USERCREATED + "=?";
         String args[] = {Integer.toString(0)};
 
         this.db.delete(TABLE_NAME, clause, args);
     }
 
-
-
-    public void open() {
-        this.db = this.getWritableDatabase();
-    }
-
-    public void close() {
-        this.db.close();
-    }
-
     public void emptyTable() {
-        //Run the Async task to empty the table
-        new EmtpySafeZoneTable().execute();
-    }
-
-    public void addSafeZone(SafeZone sz){
-        // Don't refresh the SafeZone's after a save by default.
-        this.addSafeZone(sz, false);
-    }
-
-    public void addSafeZone(SafeZone sz, boolean loadFromSQLiteAfterSave){
-        // Make a new ArrayList with the one SafeZone so we can use the Async that is already written
-        ArrayList<SafeZone> list = new ArrayList<SafeZone>();
-        list.add(sz);
-
-        new SaveSafeZonesToSQLite(loadFromSQLiteAfterSave).execute(list);
-    }
-
-    public void addSafeZones(List<SafeZone> zones){
-        // Don't refresh the SafeZone's after a save by default.
-        this.addSafeZones(zones, false);
-    }
-
-    public void addSafeZones(List<SafeZone> zones, boolean loadFromSQLiteAfterSave){
-        new SaveSafeZonesToSQLite(loadFromSQLiteAfterSave).execute(zones);
-    }
-
-    // Runs an Async task that loads SafeZones from the DB and passes them to the listener
-    public void loadSafeZones(){
-        new LoadAllSafeZones().execute();
-    }
-
-    // Runs an Async task which deletes all user created SafeZones.
-    public void clearUserCreated() {
-        new ClearUserCreatedSafeZones().execute();
-    }
-
-    // Runs an Async task which deletes all not user created SafeZones.
-    public void clearNotUserCreated() {
-        new ClearNotUserCreatedSafeZones().execute();
+        // Drop then create the table again
+        this.db.execSQL(DROP_STATEMENT);
+        this.db.execSQL(CREATE_STATEMENT);
     }
 
 
-    /********* Async Task Classes *********/
 
-    private class SaveSafeZonesToSQLite extends AsyncTask<List<SafeZone>, Void, Void> {
-        private boolean loadFromSQLiteAfterSave = true; // Defaults to true unless given in constructor
 
-        public SaveSafeZonesToSQLite() {
-            super();
-        }
 
-        // Constructor to save loadFromSQLiteAfterSave if one is given
-        public SaveSafeZonesToSQLite(boolean loadFromSQLiteAfterSave){
-            this.loadFromSQLiteAfterSave = loadFromSQLiteAfterSave;
-        }
-
-        @Override
-        protected Void doInBackground(List<SafeZone>... lists) {
-
-            // Run over all the lists that we might be given
-            for (List<SafeZone> list : lists){
-                // Loop through all the SafeZones and add them to the SQLite DB
-                for (SafeZone sz : list){
-                    SafeZoneSQLHelper.this._addSafeZone(sz);
-                }
-
-                Log.i(MapActivity.TAG, String.format("Saved %d SafeZones to SQLite.", list.size()));
-
-                // Conditionally load from SQLite if we are supposed to
-                if (loadFromSQLiteAfterSave) {
-                    loadSafeZones();
-                }
-            }
-
-            return null;
-        }
-
-    }
-
-    // Empty the table by dropping and re-adding it, as an Async task
-    private class EmtpySafeZoneTable extends AsyncTask<Void, Void, Void>{
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            // Drop then create the table again
-            SafeZoneSQLHelper.this.db.execSQL(DROP_STATEMENT);
-            SafeZoneSQLHelper.this.db.execSQL(CREATE_STATEMENT);
-
-            Log.i(MapActivity.TAG, "Dropped and re-added SafeZone table.");
-
-            return null;
-        }
-    }
-
-    // Get all the SafeZones in the SQLite DB and pass the list along to the OnSafeZoneLoadedListener
-    private class LoadAllSafeZones extends AsyncTask<Void, Void, List<SafeZone>>{
-
-        @Override
-        protected List<SafeZone> doInBackground(Void... voids) {
-
-            return SafeZoneSQLHelper.this._getSafeZones();
-        }
-
-        @Override
-        protected void onPostExecute(List<SafeZone> result){
-            super.onPostExecute(result);
-
-            // Didn't complete successfully
-            if (result == null) {
-                Log.d(MapActivity.TAG, "Failed Loading from SQLite DB failed.");
-
-                return;
-            }
-
-            Log.i(MapActivity.TAG, String.format("%d SafeZones loaded from SQLite.", result.size()));
-
-            SafeZoneSQLHelper.this.safeZonesLoadedListener.onSafeZonesLoaded(result);
-        }
-    }
-
-    private class ClearUserCreatedSafeZones extends AsyncTask<Void, Void, Void>{
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            SafeZoneSQLHelper.this._clearUserCreated();
-
-            return null;
-        }
-    }
-
-    private class ClearNotUserCreatedSafeZones extends AsyncTask<Void, Void, Void>{
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            SafeZoneSQLHelper.this._clearNotUserCreated();
-
-            return null;
-        }
-    }
 
 }
