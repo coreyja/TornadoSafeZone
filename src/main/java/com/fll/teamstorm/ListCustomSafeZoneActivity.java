@@ -9,10 +9,12 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
@@ -20,14 +22,18 @@ import com.fll.teamstorm.SQL.SafeZoneSQLAsync;
 import com.fll.teamstorm.dialogs.AddSafeZoneDialogFragment;
 import com.fll.teamstorm.dialogs.EditSafeZoneDialogFragment;
 import com.fll.teamstorm.dialogs.SafeZoneDialogFragment;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListCustomSafeZoneActivity extends ListActivity implements OnSafeZonesLoadedListener, SafeZoneDialogFragment.HasSQLAsync, AdapterView.OnItemLongClickListener {
+public class ListCustomSafeZoneActivity extends ListActivity implements OnSafeZonesLoadedListener, SafeZoneDialogFragment.HasSQLAsync, AdapterView.OnItemLongClickListener,
+        AddressToLatLngHelper.OnLatLngFound {
 
     private SafeZoneSQLAsync sqlAsync;
     private List<SafeZone> safezones = new ArrayList<SafeZone>(); // Init it to an empty list
+
+    private AddressToLatLngHelper addressHelper;
 
     private SafeZoneArrayAdapter adapter;
 
@@ -42,6 +48,9 @@ public class ListCustomSafeZoneActivity extends ListActivity implements OnSafeZo
         // Set up the adapter
         this.adapter = new SafeZoneArrayAdapter(this, R.layout.list_item_safe_zone, safezones);
         setListAdapter(this.adapter);
+
+        // Set up addressHelper
+        this.addressHelper = new AddressToLatLngHelper(this);
 
         ListView list = getListView();
         list.setOnItemLongClickListener(this);
@@ -85,8 +94,12 @@ public class ListCustomSafeZoneActivity extends ListActivity implements OnSafeZo
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id){
+            case R.id.menu_list_new_from_address:
+                // TODO: Add something to launch a dialog to get Address
+//                new AddressToLatLngHelper().convertAddressToLatLng("sample");
+                new AddressDialog().show(getFragmentManager(), AddressDialog.TAG);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -108,7 +121,7 @@ public class ListCustomSafeZoneActivity extends ListActivity implements OnSafeZo
     public void onListItemClick(ListView l, View v, int position, long id) {
         SafeZone sz = (SafeZone) this.getListAdapter().getItem(position);
 
-        new EditSafeZoneDialogFragment(sz).show(getFragmentManager(), AddSafeZoneDialogFragment.TAG);
+        new EditSafeZoneDialogFragment(sz).show(getFragmentManager(), EditSafeZoneDialogFragment.TAG);
 
     }
 
@@ -126,6 +139,11 @@ public class ListCustomSafeZoneActivity extends ListActivity implements OnSafeZo
         new DeleteSafeZoneDialog(sz).show(getFragmentManager(), DeleteSafeZoneDialog.TAG);
 
         return true;
+    }
+
+    @Override
+    public void OnLatLngFound(LatLng coords) {
+        new AddSafeZoneDialogFragment(coords).show(getFragmentManager(), AddSafeZoneDialogFragment.TAG);
     }
 
     private class DeleteSafeZoneDialog extends DialogFragment {
@@ -175,5 +193,41 @@ public class ListCustomSafeZoneActivity extends ListActivity implements OnSafeZo
             }
         }
 
+    }
+
+    private class AddressDialog extends DialogFragment {
+
+        public static final String TAG = "FLL-TS-DIALOG-ADDRESS";
+
+        private EditText address_field;
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+            // Inflate the layout and add it to the dialog
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            View v = inflater.inflate(R.layout.dialog_address, null);
+            builder.setView(v);
+
+            // Store the address_field
+            address_field = (EditText) v.findViewById(R.id.dialog_address_address);
+
+            builder.setTitle(getString(R.string.dialog_address_title));
+
+            builder.setPositiveButton(getString(R.string.dialog_address_positive), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    String addr = address_field.getText().toString();
+
+                    addressHelper.convertAddressToLatLng(addr);
+                }
+            });
+
+            // If cancel is selected a callback isn't needed as we just close the dialog.
+            builder.setNeutralButton(R.string.string_cancel, null);
+
+            return builder.create();
+        }
     }
 }
