@@ -26,7 +26,6 @@ public abstract class SafeZoneDialogFragment extends DialogFragment implements D
 
     protected String titleText, positiveButtonText;
 
-
     protected EditText title_field, lat_field, lng_field, curr_cap_field, max_cap_field, phone_field, extra_field;
 
     protected SafeZoneSQLAsync sqlAsync;

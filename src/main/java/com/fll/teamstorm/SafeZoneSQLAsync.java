@@ -52,6 +52,11 @@ public class SafeZoneSQLAsync {
         new EditSafeZone().execute(sz);
     }
 
+    // Runs an Async task the deleted the specified SafeZone
+    public void deleteSafeZone(long id){
+        new DeleteSafeZone().execute(id);
+    }
+
     public void addSafeZone(SafeZone sz, boolean loadFromSQLiteAfterSave){
         // Make a new ArrayList with the one SafeZone so we can use the Async that is already written
         ArrayList<SafeZone> list = new ArrayList<SafeZone>();
@@ -228,6 +233,28 @@ public class SafeZoneSQLAsync {
                 int status = SafeZoneSQLAsync.this.sqlHelper.editSafeZone(id, sz);
 
                 Log.i(MapActivity.TAG, String.format("Updated SZ with ID:%d Status:%d", id, status));
+
+            }
+
+            // Load all the Custom SafeZones so that the zones update after the edit.
+            SafeZoneSQLAsync.this.loadCustomSafeZones();
+
+            return null;
+        }
+
+    }
+
+    private class DeleteSafeZone extends AsyncTask<Long, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Long... ids) {
+
+            // Run over all the lists that we might be given
+            for (Long id : ids){
+
+                int status = SafeZoneSQLAsync.this.sqlHelper.deleteSafeZone(id);
+
+                Log.i(MapActivity.TAG, String.format("Deleted SZ with ID:%d Status:%d", id, status));
 
             }
 

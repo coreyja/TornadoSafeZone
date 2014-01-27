@@ -53,5 +53,8 @@
 
     <string name="dialog_edit_safezone_title">Edit personal SafeZone</string>
     <string name="dialog_edit_safezone_positive_text">Edit SafeZone</string>
+    <string name="dialog_delete_safezone_title">Delete SafeZone?</string>
+    <string name="dialog_delete_safezone_msg">Are you sure you want to delete the Custom Safe Zone named %s</string>
+    <string name="dialog_delete_positive">Delete SafeZone</string>
 
 </resources>

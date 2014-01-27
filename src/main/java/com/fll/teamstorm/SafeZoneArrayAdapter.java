@@ -51,8 +51,6 @@ public class SafeZoneArrayAdapter extends ArrayAdapter<SafeZone> {
         ((TextView) convertView.findViewById(R.id.list_item_title)).setText(sz.getTitle());
         ((TextView) convertView.findViewById(R.id.list_item_phone)).setText(sz.getPhone());
 
-        Log.i(MapActivity.TAG, String.format("Pos:%d Title:%s ID:%d", position, sz.getTitle(), sz.getId()));
-
         return convertView;
     }
 }

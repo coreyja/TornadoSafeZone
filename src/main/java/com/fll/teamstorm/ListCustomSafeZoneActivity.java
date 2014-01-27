@@ -2,9 +2,14 @@ package com.fll.teamstorm;
 
 import android.app.Activity;
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.ListActivity;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
@@ -19,7 +25,7 @@ import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListCustomSafeZoneActivity extends ListActivity implements OnSafeZonesLoadedListener, SafeZoneDialogFragment.HasSQLAsync{
+public class ListCustomSafeZoneActivity extends ListActivity implements OnSafeZonesLoadedListener, SafeZoneDialogFragment.HasSQLAsync, AdapterView.OnItemLongClickListener {
 
     private SafeZoneSQLAsync sqlAsync;
     private List<SafeZone> safezones = new ArrayList<SafeZone>(); // Init it to an empty list
@@ -37,6 +43,9 @@ public class ListCustomSafeZoneActivity extends ListActivity implements OnSafeZo
         // Set up the adapter
         this.adapter = new SafeZoneArrayAdapter(this, R.layout.list_item_safe_zone, safezones);
         setListAdapter(this.adapter);
+
+        ListView list = getListView();
+        list.setOnItemLongClickListener(this);
     }
 
     /*
@@ -102,9 +111,70 @@ public class ListCustomSafeZoneActivity extends ListActivity implements OnSafeZo
 
         new EditSafeZoneDialogFragment(sz).show(getFragmentManager(), AddSafeZoneDialogFragment.TAG);
 
-        Log.i(MapActivity.TAG, String.format("Title:%s", sz.getTitle()));
     }
 
     @Override
     public SafeZoneSQLAsync getSqlAsync() { return this.sqlAsync; }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+        // Vibrate for 50 milliseconds.
+        Vibrator v = (Vibrator) getSystemService(this.VIBRATOR_SERVICE);
+        v.vibrate(50);
+
+        SafeZone sz = (SafeZone) this.getListAdapter().getItem(position);
+        new DeleteSafeZoneDialog(sz).show(getFragmentManager(), DeleteSafeZoneDialog.TAG);
+
+        return true;
+    }
+
+    private class DeleteSafeZoneDialog extends DialogFragment {
+
+        public static final String TAG = "SZ-DIALOG-DELETE";
+
+        private SafeZoneSQLAsync sqlAsync;
+
+        private SafeZone sz;
+
+        public DeleteSafeZoneDialog(SafeZone sz){
+            super();
+
+            this.sz = sz;
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+            builder.setTitle(getString(R.string.dialog_delete_safezone_title));
+
+            builder.setMessage(getString(R.string.dialog_delete_safezone_msg, this.sz.getTitle()));
+
+            builder.setPositiveButton(getString(R.string.dialog_delete_positive), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    ListCustomSafeZoneActivity.this.getSqlAsync().deleteSafeZone(sz.getId());
+                }
+            });
+
+            // If cancel is selected a callback isn't needed as we just close the dialog.
+            builder.setNeutralButton(R.string.string_cancel, null);
+
+            return builder.create();
+        }
+
+        @Override
+        public void onAttach(Activity activity) {
+            super.onAttach(activity);
+
+            // Assuming the activity is MapActivity get the SQLHelper
+            try {
+                this.sqlAsync = ((SafeZoneDialogFragment.HasSQLAsync) activity).getSqlAsync();
+            } catch (Exception e) {
+                Log.d(TAG, "Could not get SQLAsync from calling activity.");
+            }
+        }
+
+    }
 }
