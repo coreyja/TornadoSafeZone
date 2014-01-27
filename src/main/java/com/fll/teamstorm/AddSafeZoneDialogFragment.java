@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.appspot.perfect_atrium_421.safezones.model.GeoPtMessage;
 import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
@@ -20,13 +22,15 @@ import java.util.Map;
 /**
  * Created by coreyja on 1/19/14.
  */
-public class AddSafeZoneDialogFragment extends DialogFragment implements DialogInterface.OnClickListener{
+public class AddSafeZoneDialogFragment extends DialogFragment implements DialogInterface.OnClickListener, View.OnClickListener {
 
     public static final String TAG = "SZ-ADDNEW";
 
     private LatLng latlng;
 
     private EditText title_field, lat_field, lng_field, curr_cap_field, max_cap_field, phone_field, extra_field;
+    private TextView hours_label;
+    private LinearLayout hours_cont;
 
     private SafeZoneSQLHelper SQLhelper;
 
@@ -60,6 +64,12 @@ public class AddSafeZoneDialogFragment extends DialogFragment implements DialogI
         phone_field = (EditText) v.findViewById(R.id.dialog_add_safezone_phone);
         extra_field = (EditText) v.findViewById(R.id.dialog_add_safezone_extra);
 
+        hours_label = ((TextView) v.findViewById(R.id.dialog_add_safezone_hours));
+
+        hours_cont = (LinearLayout) v.findViewById(R.id.dialog_add_safezone_hours_container);
+
+        ((TextView) v.findViewById(R.id.dialog_add_safezone_hours)).setOnClickListener(this);
+
         builder.setPositiveButton(R.string.dialog_add_safezone_positive_text , this);
 
         // The callback can be null, cause all we need to do it close the dialog.
@@ -86,6 +96,7 @@ public class AddSafeZoneDialogFragment extends DialogFragment implements DialogI
         }
     }
 
+    /********** onClick Listener for the Dialog Buttons **********/
     @Override
     public void onClick(DialogInterface dialogInterface, int i) {
         // Get all the info, and create a SafeZone
@@ -108,5 +119,19 @@ public class AddSafeZoneDialogFragment extends DialogFragment implements DialogI
         sz.setIsUserCreated(true);
 
         this.SQLhelper.addSafeZone(sz, true);
+    }
+
+    /********** onClick Listener for the View **********/
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+
+        switch (id){
+            case R.id.dialog_add_safezone_hours:
+                // Toggle showing or hiding the hours container
+                this.hours_cont.setVisibility(hours_cont.isShown() ? View.GONE : View.VISIBLE);
+                this.hours_label.setText(hours_cont.isShown() ? R.string.dialog_add_safezone_hours_collapse : R.string.dialog_add_safezone_hours_expand);
+                break;
+        }
     }
 }

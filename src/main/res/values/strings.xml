@@ -61,4 +61,10 @@
     <string name="menu_dev_refresh">Load from Endpoints</string>
     <string name="menu_dev_load_sql">Load from SQLite DB</string>
 
+    <string name="dialog_add_safezone_hours_expand">Click to expand hours</string>
+    <string name="dialog_add_safezone_hours_collapse">Click to collapse hours</string>
+
+    <string name="dialog_add_safezone_mon_open_label">Monday Open</string>
+    <string name="dialog_add_safezone_mon_close_label">Monday Close</string>
+
 </resources>
