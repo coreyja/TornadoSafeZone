@@ -64,5 +64,14 @@
     <string name="dialog_address_address_hint">Address to convert to Latitude and Longitude</string>
     <string name="dialog_address_help">Please enter an address to create a SafeZone at the location. You can also add a SafeZone by long-pressing on the map in the location you want to add the SafeZone.</string>
     <string name="menu_list_new_safe_zone">Add Custom SafeZone</string>
+    <string name="string_monday">Monday</string>
+    <string name="string_tuesday">Tuesday</string>
+    <string name="string_wednesday">Wednesday</string>
+    <string name="string_thursday">Thursday</string>
+    <string name="string_friday">Friday</string>
+    <string name="string_saturday">Saturday</string>
+    <string name="string_sunday">Sunday</string>
+    <string name="dialog_hours_title">Edit Hours</string>
+    <string name="dialog_hours_positive">Save SafeZone</string>
 
 </resources>

@@ -51,7 +51,12 @@ public class SafeZoneSQLAsync {
 
     // Runs an Async task that updates the SafeZone passed into it
     public void editSafeZone(SafeZone sz){
-        new EditSafeZone().execute(sz);
+        if (sz.getId() != null){
+            new EditSafeZone().execute(sz);
+        } else {
+            this.addSafeZone(sz, true);
+        }
+
     }
 
     // Runs an Async task the deleted the specified SafeZone
@@ -244,7 +249,11 @@ public class SafeZoneSQLAsync {
             }
 
             // Load all the Custom SafeZones so that the zones update after the edit.
-            SafeZoneSQLAsync.this.loadCustomSafeZones();
+            if (SafeZoneSQLAsync.this.safeZonesLoadedListener instanceof MapActivity){
+                SafeZoneSQLAsync.this.loadSafeZones();
+            } else {
+                SafeZoneSQLAsync.this.loadCustomSafeZones();
+            }
 
             return null;
         }
@@ -265,8 +274,12 @@ public class SafeZoneSQLAsync {
 
             }
 
-            // Load all the Custom SafeZones so that the zones update after the edit.
-            SafeZoneSQLAsync.this.loadCustomSafeZones();
+            // Load all the Custom SafeZones so that the zones update after the delete
+            if (SafeZoneSQLAsync.this.safeZonesLoadedListener instanceof MapActivity){
+                SafeZoneSQLAsync.this.loadSafeZones();
+            } else {
+                SafeZoneSQLAsync.this.loadCustomSafeZones();
+            }
 
             return null;
         }

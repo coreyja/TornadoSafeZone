@@ -11,5 +11,7 @@
     <color name="occupancy_90">#ffff0000</color>
     <color name="occupancy_75">#ffe6d600</color>
 
+    <color name="light_gray">#ffd7d7d7</color>
+
 
 </resources>

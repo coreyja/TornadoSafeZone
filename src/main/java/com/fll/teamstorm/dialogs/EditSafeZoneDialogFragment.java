@@ -53,6 +53,8 @@ public class EditSafeZoneDialogFragment extends SafeZoneDialogFragment {
         this.loadSafeZoneFromDialog(this.sz);
 
         // Edit the given SafeZone
-        this.sqlAsync.editSafeZone(this.sz);
+//        this.sqlAsync.editSafeZone(this.sz);
+
+        new HoursDialog(this.sz).show(getFragmentManager(), HoursDialog.TAG);
     }
 }

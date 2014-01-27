@@ -317,7 +317,7 @@ public final class SafeZone extends com.google.api.client.json.GenericJson {
 
         // If either the open or close time don't exists for the day assume the store is closed.
         // This is because we know the hours object exists, so the store has some hours listed just not the current day of week
-        if (openTime == null || closeTime == null){
+        if (openTime == null || closeTime == null || openTime == "" || closeTime == ""){
             return dayOfWeekString + ": CLOSED";
         }
 
