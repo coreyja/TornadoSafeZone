@@ -19,7 +19,7 @@ import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListCustomSafeZoneActivity extends ListActivity implements OnSafeZonesLoadedListener{
+public class ListCustomSafeZoneActivity extends ListActivity implements OnSafeZonesLoadedListener, SafeZoneDialogFragment.HasSQLAsync{
 
     private SafeZoneSQLAsync sqlAsync;
     private List<SafeZone> safezones = new ArrayList<SafeZone>(); // Init it to an empty list
@@ -100,6 +100,11 @@ public class ListCustomSafeZoneActivity extends ListActivity implements OnSafeZo
     public void onListItemClick(ListView l, View v, int position, long id) {
         SafeZone sz = (SafeZone) this.getListAdapter().getItem(position);
 
+        new EditSafeZoneDialogFragment(sz).show(getFragmentManager(), AddSafeZoneDialogFragment.TAG);
+
         Log.i(MapActivity.TAG, String.format("Title:%s", sz.getTitle()));
     }
+
+    @Override
+    public SafeZoneSQLAsync getSqlAsync() { return this.sqlAsync; }
 }

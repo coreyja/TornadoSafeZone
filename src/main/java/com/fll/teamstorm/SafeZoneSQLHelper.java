@@ -217,6 +217,15 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
         return this.db.delete(TABLE_NAME, clause, args);
     }
 
+    public int editSafeZone(long id, SafeZone sz){
+        String clause = KEY_ID + "=?";
+        String args[] = {Long.toString(id)};
+
+        ContentValues vals = getContentValuesFromSafeZone(sz);
+
+        return this.db.update(TABLE_NAME, vals, clause, args);
+    }
+
     public long addSafeZone(SafeZone sz){
         if (sz == null) return -1;
         ContentValues vals = getContentValuesFromSafeZone(sz);

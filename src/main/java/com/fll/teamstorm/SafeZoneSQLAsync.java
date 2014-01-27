@@ -39,12 +39,17 @@ public class SafeZoneSQLAsync {
 
     public void emptyTable() {
         //Run the Async task to empty the table
-        new EmtpySafeZoneTable().execute();
+        new EmptySafeZoneTable().execute();
     }
 
     public void addSafeZone(SafeZone sz){
         // Don't refresh the SafeZone's after a save by default.
         this.addSafeZone(sz, false);
+    }
+
+    // Runs an Async task that updates the SafeZone passed into it
+    public void editSafeZone(SafeZone sz){
+        new EditSafeZone().execute(sz);
     }
 
     public void addSafeZone(SafeZone sz, boolean loadFromSQLiteAfterSave){
@@ -123,7 +128,7 @@ public class SafeZoneSQLAsync {
     }
 
     // Empty the table by dropping and re-adding it, as an Async task
-    private class EmtpySafeZoneTable extends AsyncTask<Void, Void, Void>{
+    private class EmptySafeZoneTable extends AsyncTask<Void, Void, Void>{
 
         @Override
         protected Void doInBackground(Void... voids) {
@@ -209,5 +214,28 @@ public class SafeZoneSQLAsync {
 
             return null;
         }
+    }
+
+    private class EditSafeZone extends AsyncTask<SafeZone, Void, Void> {
+
+        @Override
+        protected Void doInBackground(SafeZone... zones) {
+
+            // Run over all the lists that we might be given
+            for (SafeZone sz : zones){
+
+                long id = sz.getId();
+                int status = SafeZoneSQLAsync.this.sqlHelper.editSafeZone(id, sz);
+
+                Log.i(MapActivity.TAG, String.format("Updated SZ with ID:%d Status:%d", id, status));
+
+            }
+
+            // Load all the Custom SafeZones so that the zones update after the edit.
+            SafeZoneSQLAsync.this.loadCustomSafeZones();
+
+            return null;
+        }
+
     }
 }

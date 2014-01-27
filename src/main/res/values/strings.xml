@@ -51,4 +51,7 @@
     <string name="menu_map_view_custom_sz">View Custom SafeZones</string>
     <string name="title_activity_list_custom_safe_zone">ListCustomSafeZoneActivity</string>
 
+    <string name="dialog_edit_safezone_title">Edit personal SafeZone</string>
+    <string name="dialog_edit_safezone_positive_text">Edit SafeZone</string>
+
 </resources>

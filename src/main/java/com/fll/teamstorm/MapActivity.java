@@ -40,7 +40,8 @@ import java.io.IOException;
 import java.util.List;
 
 public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter, GooglePlayServicesClient.ConnectionCallbacks,
-        GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.OnInfoWindowClickListener, OnSafeZonesLoadedListener, GoogleMap.OnMapLongClickListener {
+        GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.OnInfoWindowClickListener, OnSafeZonesLoadedListener, GoogleMap.OnMapLongClickListener,
+        SafeZoneDialogFragment.HasSQLAsync{
 
     public static final String TAG = "FLL-TS";
 
