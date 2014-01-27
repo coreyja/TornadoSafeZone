@@ -69,7 +69,7 @@ public class SafeZoneSQLAsync {
         new LoadAllSafeZones().execute();
     }
 
-    // Runs an Async tasks which loads all the Custom SafeZone's TODO: and does something with them
+    // Runs an Async tasks which loads all the Custom SafeZone's and pass them to the listener
     public void loadCustomSafeZones() {
         new LoadCustomSafeZones().execute();
     }
@@ -184,7 +184,8 @@ public class SafeZoneSQLAsync {
 
             Log.i(MapActivity.TAG, String.format("%d Custom SafeZones loaded from SQLite.", result.size()));
 
-            // TODO: Make this do something with the list
+            // If we are loading Custom SafeZones this will most likely return to the ListCustomSZ activity
+            SafeZoneSQLAsync.this.safeZonesLoadedListener.onSafeZonesLoaded(result);
         }
     }
 

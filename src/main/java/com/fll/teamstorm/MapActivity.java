@@ -162,7 +162,8 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
 
             /*** MENU ***/
             case R.id.menu_map_view_custom_sz:
-                this.sqlAsync.loadCustomSafeZones();
+                Intent i = new Intent(this, ListCustomSafeZoneActivity.class);
+                startActivity(i);
                 break;
 
 

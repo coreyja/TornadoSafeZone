@@ -12,31 +12,22 @@
     <string name="for_adults">For Adults</string>
     <string name="for_seniors">For Seniors</string>
     <string name="not_implemented">This activity not implemented yet! We are working on it.</string>
-
     <string name="format_occupancy">Current Occupancy: %d</string>
     <string name="format_max_occupancy">Maximum Occupancy: %d</string>
-
     <string name="occupancy_75">This SafeZone is currently over 75% full.</string>
     <string name="occupancy_90">This SafeZone is currently over 90% full.</string>
     <string name="occupancy_100">This SafeZone is currently completely full.</string>
-
     <string name="string_cancel">Cancel</string>
-
     <string name="about_idea_by">App Idea by Team Storm:</string>
     <string name="about_development_by">App Development by Corey Alexander</string>
     <string name="about_title">About Us</string>
-
     <string name="intents_message_both">Would you like to get directions or call this SafeZone?</string>
     <string name="intents_message_no_phone">Would you like to get directions to this SafeZone?</string>
-
     <string name="intents_directions_button">Get Directions</string>
     <string name="intents_call_button">Call SafeZone</string>
     <string name="info_click_me_message">Click this bubble to call this SafeZone or get directions to it.</string>
-
     <string name="info_format_dist_away">%.1f miles away</string>
-
     <string name="dialog_add_safezone_title">Add new personal SafeZone</string>
-
     <string name="dialog_add_safezone_title_label">SafeZone Title</string>
     <string name="dialog_add_safezone_current_capacity_label">Current Capacity</string>
     <string name="dialog_add_safezone_max_capacity_label">Max Capacity</string>
@@ -44,7 +35,6 @@
     <string name="dialog_add_safezone_extra_label">Extra Information</string>
     <string name="dialog_add_safezone_latitude_label">Latitude</string>
     <string name="dialog_add_safezone_longitude_label">Longitude</string>
-
     <string name="dialog_add_safezone_title_hint">SafeZone</string>
     <string name="dialog_add_safezone_current_capacity_hint">50</string>
     <string name="dialog_add_safezone_max_capacity_hint">100</string>
@@ -52,14 +42,13 @@
     <string name="dialog_add_safezone_extra_hint">Any additional information you want to place here.</string>
     <string name="dialog_add_safezone_latitude_hint">38.45</string>
     <string name="dialog_add_safezone_longitude_hint">-87.36</string>
-
     <string name="dialog_add_safezone_positive_text">Add SafeZone</string>
-
     <string name="menu_dev_clear_user_created">Delete all user created SZs</string>
     <string name="menu_dev_clear_not_user_created">Delete all not user created SZs</string>
     <string name="menu_dev_empty_table">Empty SQLite Table</string>
     <string name="menu_dev_refresh">Load from Endpoints</string>
     <string name="menu_dev_load_sql">Load from SQLite DB</string>
     <string name="menu_map_view_custom_sz">View Custom SafeZones</string>
+    <string name="title_activity_list_custom_safe_zone">ListCustomSafeZoneActivity</string>
 
 </resources>
