@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -15,23 +14,40 @@ import com.appspot.perfect_atrium_421.safezones.model.GeoPtMessage;
 import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
 import com.fll.teamstorm.R;
 import com.fll.teamstorm.SQL.SafeZoneSQLAsync;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
- * Created by coreyja on 1/19/14.
+ * Created by coreyja on 1/27/14.
  */
-public abstract class SafeZoneDialogFragment extends DialogFragment implements DialogInterface.OnClickListener{
+public class SafeZoneDialogFragment extends DialogFragment implements DialogInterface.OnClickListener{
 
-    public static final String TAG = "SZ-DIALOG";
+    public static final String TAG = "FLL-TS-SZ-DIALOG";
 
-    protected String titleText, positiveButtonText;
+    private String titleText, positiveButtonText;
 
-    protected EditText title_field, lat_field, lng_field, curr_cap_field, max_cap_field, phone_field, extra_field;
+    private EditText title_field, lat_field, lng_field, curr_cap_field, max_cap_field, phone_field, extra_field;
 
-    protected SafeZoneSQLAsync sqlAsync;
+    private SafeZoneSQLAsync sqlAsync;
 
-    // The default constructor must set titleText and positiveButtonText
+    private SafeZone sz;
+
     public SafeZoneDialogFragment() {
         super();
+
+        this.sz = new SafeZone();
+    }
+
+    public SafeZoneDialogFragment(LatLng latLng){
+        this();
+
+        this.sz.setLocation(new GeoPtMessage().setLat(latLng.latitude).setLon(latLng.longitude));
+    }
+
+    public SafeZoneDialogFragment(SafeZone sz) {
+        super();
+
+        // Set the SafeZone to edit
+        this.sz = sz;
     }
 
     // Gets the fields for the SZ from the dialog, and save the info to the provided SafeZone
@@ -67,6 +83,23 @@ public abstract class SafeZoneDialogFragment extends DialogFragment implements D
         sz.setIsUserCreated(true);
     }
 
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        AlertDialog.Builder builder = this.buildDialog();
+
+        return builder.create();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        // Init the texts field needed
+        this.titleText = getString(R.string.dialog_edit_safezone_title);
+        this.positiveButtonText = getString(R.string.dialog_edit_safezone_positive_text);
+    }
+
     public AlertDialog.Builder buildDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -91,37 +124,39 @@ public abstract class SafeZoneDialogFragment extends DialogFragment implements D
         // The callback can be null, cause all we need to do it close the dialog.
         builder.setNeutralButton(R.string.string_cancel, null);
 
+        title_field.setText(sz.getTitle());
 
+        if (sz.getLocation() != null && !sz.getLocation().isEmpty()) {
+            lat_field.setText(Double.toString(sz.getLocation().getLat()));
+            lng_field.setText(Double.toString(sz.getLocation().getLon()));
+        }
+
+        if (sz.hasOccupancy()) {
+            curr_cap_field.setText(Long.toString(sz.getOccupancy()));
+        }
+
+        if (sz.hasMaxOccupancy()) {
+            max_cap_field.setText(Long.toString(sz.getMaxOccupancy()));
+        }
+
+        phone_field.setText(sz.getPhone());
+        extra_field.setText(sz.getExtraInfo());
 
         return builder;
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = this.buildDialog();
+    public void onClick(DialogInterface dialogInterface, int i) {
 
-        return builder.create();
+        // Get the info from the fields
+        this.loadSafeZoneFromDialog(this.sz);
+
+        new HoursDialog(this.sz).show(getFragmentManager(), HoursDialog.TAG);
     }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        // Assuming the activity is MapActivity get the SQLHelper
-        try {
-            this.sqlAsync = ((HasSQLAsync) activity).getSqlAsync();
-        } catch (Exception e) {
-            Log.d(TAG, "Could not get SQLAsync from calling activity.");
-        }
-    }
-
-    @Override
-    public abstract void onClick(DialogInterface dialogInterface, int i);
 
     public interface HasSQLAsync {
 
         public SafeZoneSQLAsync getSqlAsync();
 
     }
-
 }

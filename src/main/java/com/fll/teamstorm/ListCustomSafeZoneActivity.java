@@ -19,8 +19,6 @@ import android.widget.ListView;
 
 import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
 import com.fll.teamstorm.SQL.SafeZoneSQLAsync;
-import com.fll.teamstorm.dialogs.AddSafeZoneDialogFragment;
-import com.fll.teamstorm.dialogs.EditSafeZoneDialogFragment;
 import com.fll.teamstorm.dialogs.SafeZoneDialogFragment;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -111,7 +109,7 @@ public class ListCustomSafeZoneActivity extends ListActivity implements OnSafeZo
         this.safezones.addAll(zones);
         this.adapter.notifyDataSetChanged();
 
-        Log.i(MapActivity.TAG,String.format("%d SafeZones loaded by ListCustomSZ Activity", this.adapter.getCount()));
+        Log.i(MapActivity.TAG, String.format("%d SafeZones loaded by ListCustomSZ Activity", this.adapter.getCount()));
 
     }
 
@@ -119,7 +117,7 @@ public class ListCustomSafeZoneActivity extends ListActivity implements OnSafeZo
     public void onListItemClick(ListView l, View v, int position, long id) {
         SafeZone sz = (SafeZone) this.getListAdapter().getItem(position);
 
-        new EditSafeZoneDialogFragment(sz).show(getFragmentManager(), EditSafeZoneDialogFragment.TAG);
+        new SafeZoneDialogFragment(sz).show(getFragmentManager(), SafeZoneDialogFragment.TAG);
 
     }
 
@@ -141,7 +139,7 @@ public class ListCustomSafeZoneActivity extends ListActivity implements OnSafeZo
 
     @Override
     public void OnLatLngFound(LatLng coords) {
-        new AddSafeZoneDialogFragment(coords).show(getFragmentManager(), AddSafeZoneDialogFragment.TAG);
+        new SafeZoneDialogFragment(coords).show(getFragmentManager(), SafeZoneDialogFragment.TAG);
     }
 
     private class DeleteSafeZoneDialog extends DialogFragment {

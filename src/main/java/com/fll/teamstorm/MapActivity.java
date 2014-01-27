@@ -25,7 +25,6 @@ import com.appspot.perfect_atrium_421.safezones.model.GeoPtMessage;
 import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
 import com.appspot.perfect_atrium_421.safezones.model.SafeZoneCollection;
 import com.fll.teamstorm.SQL.SafeZoneSQLAsync;
-import com.fll.teamstorm.dialogs.AddSafeZoneDialogFragment;
 import com.fll.teamstorm.dialogs.SafeZoneDialogFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -357,7 +356,7 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         v.vibrate(50);
 
         // Launch new SafeZone dialog with lat/long prefilled
-        new AddSafeZoneDialogFragment(latLng).show(getFragmentManager(), AddSafeZoneDialogFragment.TAG);
+        new SafeZoneDialogFragment(latLng).show(getFragmentManager(), SafeZoneDialogFragment.TAG);
 
         Log.i(MapActivity.TAG, String.format("User long pressed on location with lat=%f long=%f", latLng.latitude, latLng.longitude));
     }

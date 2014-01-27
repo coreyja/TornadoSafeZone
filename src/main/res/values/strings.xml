@@ -51,8 +51,9 @@
     <string name="menu_map_view_custom_sz">View Custom SafeZones</string>
     <string name="title_activity_list_custom_safe_zone">ListCustomSafeZoneActivity</string>
 
-    <string name="dialog_edit_safezone_title">Edit personal SafeZone</string>
-    <string name="dialog_edit_safezone_positive_text">Edit SafeZone</string>
+    <string name="dialog_edit_safezone_title">Edit Custom SafeZone</string>
+    <string name="dialog_edit_safezone_positive_text">Edit Hours</string>
+
     <string name="dialog_delete_safezone_title">Delete SafeZone?</string>
     <string name="dialog_delete_safezone_msg">Are you sure you want to delete the Custom Safe Zone named %s</string>
     <string name="dialog_delete_positive">Delete SafeZone</string>
@@ -62,7 +63,7 @@
     <string name="dialog_address_title">Create SafeZone from Address</string>
     <string name="dialog_address_positive">Next</string>
     <string name="dialog_address_address_hint">Address to convert to Latitude and Longitude</string>
-    <string name="dialog_address_help">Please enter an address to create a SafeZone at the location. You can also add a SafeZone by long-pressing on the map in the location you want to add the SafeZone.</string>
+    <string name="dialog_address_help">Please enter an address to create a SafeZone at the address. You can also add a SafeZone by long-pressing on the map in the location you want to add the SafeZone.</string>
     <string name="menu_list_new_safe_zone">Add Custom SafeZone</string>
     <string name="string_monday">Monday</string>
     <string name="string_tuesday">Tuesday</string>
