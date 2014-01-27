@@ -125,7 +125,12 @@ public class SafeZoneSQLAsync {
 
                 // Conditionally load from SQLite if we are supposed to
                 if (loadFromSQLiteAfterSave) {
-                    SafeZoneSQLAsync.this.loadSafeZones();
+                    if (SafeZoneSQLAsync.this.safeZonesLoadedListener instanceof MapActivity){
+                        SafeZoneSQLAsync.this.loadSafeZones();
+                    } else {
+                        SafeZoneSQLAsync.this.loadCustomSafeZones();
+                    }
+
                 }
             }
 

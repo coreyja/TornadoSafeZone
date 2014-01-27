@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.fll.teamstorm.ListCustomSafeZoneActivity" >
     
-    <item android:id="@+id/menu_list_new_from_address"
-        android:title="@string/menu_list_new_from_address"
+    <item android:id="@+id/menu_list_new_safe_zone"
+        android:title="@string/menu_list_new_safe_zone"
         android:orderInCategory="100"
         android:showAsAction="never" />
 

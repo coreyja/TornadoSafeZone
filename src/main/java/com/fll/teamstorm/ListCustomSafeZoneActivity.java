@@ -95,9 +95,7 @@ public class ListCustomSafeZoneActivity extends ListActivity implements OnSafeZo
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         switch (id){
-            case R.id.menu_list_new_from_address:
-                // TODO: Add something to launch a dialog to get Address
-//                new AddressToLatLngHelper().convertAddressToLatLng("sample");
+            case R.id.menu_list_new_safe_zone:
                 new AddressDialog().show(getFragmentManager(), AddressDialog.TAG);
                 return true;
         }

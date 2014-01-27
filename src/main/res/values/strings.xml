@@ -57,11 +57,12 @@
     <string name="dialog_delete_safezone_msg">Are you sure you want to delete the Custom Safe Zone named %s</string>
     <string name="dialog_delete_positive">Delete SafeZone</string>
 
-    <string name="menu_list_new_from_address">Add SafeZone from address</string>
 
     <string name="dialog_address_address_label">Address</string>
     <string name="dialog_address_title">Create SafeZone from Address</string>
-    <string name="dialog_address_positive">Add SafeZone</string>
+    <string name="dialog_address_positive">Next</string>
     <string name="dialog_address_address_hint">Address to convert to Latitude and Longitude</string>
+    <string name="dialog_address_help">Please enter an address to create a SafeZone at the location. You can also add a SafeZone by long-pressing on the map in the location you want to add the SafeZone.</string>
+    <string name="menu_list_new_safe_zone">Add Custom SafeZone</string>
 
 </resources>
