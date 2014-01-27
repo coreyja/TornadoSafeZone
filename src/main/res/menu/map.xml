@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.fll.teamstorm.MapActivity">
+
+    <item android:id="@+id/menu_map_view_custom_sz"
+        android:title="@string/menu_map_view_custom_sz"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+
+</menu>

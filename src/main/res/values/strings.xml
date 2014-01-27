@@ -60,5 +60,6 @@
     <string name="menu_dev_empty_table">Empty SQLite Table</string>
     <string name="menu_dev_refresh">Load from Endpoints</string>
     <string name="menu_dev_load_sql">Load from SQLite DB</string>
+    <string name="menu_map_view_custom_sz">View Custom SafeZones</string>
 
 </resources>

@@ -69,6 +69,11 @@ public class SafeZoneSQLAsync {
         new LoadAllSafeZones().execute();
     }
 
+    // Runs an Async tasks which loads all the Custom SafeZone's TODO: and does something with them
+    public void loadCustomSafeZones() {
+        new LoadCustomSafeZones().execute();
+    }
+
     // Runs an Async task which deletes all user created SafeZones.
     public void clearUserCreated() {
         new ClearUserCreatedSafeZones().execute();
@@ -154,6 +159,32 @@ public class SafeZoneSQLAsync {
             Log.i(MapActivity.TAG, String.format("%d SafeZones loaded from SQLite.", result.size()));
 
             SafeZoneSQLAsync.this.safeZonesLoadedListener.onSafeZonesLoaded(result);
+        }
+    }
+
+    // Get all the Custom SafeZones in the SQLite DB and pass the list along to the OnSafeZoneLoadedListener
+    private class LoadCustomSafeZones extends AsyncTask<Void, Void, List<SafeZone>>{
+
+        @Override
+        protected List<SafeZone> doInBackground(Void... voids) {
+
+            return SafeZoneSQLAsync.this.sqlHelper.getCustomSafeZones();
+        }
+
+        @Override
+        protected void onPostExecute(List<SafeZone> result){
+            super.onPostExecute(result);
+
+            // Didn't complete successfully
+            if (result == null) {
+                Log.d(MapActivity.TAG, "Failed: Loading from SQLite DB failed.");
+
+                return;
+            }
+
+            Log.i(MapActivity.TAG, String.format("%d Custom SafeZones loaded from SQLite.", result.size()));
+
+            // TODO: Make this do something with the list
         }
     }
 

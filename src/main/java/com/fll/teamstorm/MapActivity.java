@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.widget.TextView;
 
@@ -42,6 +43,8 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
         GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.OnInfoWindowClickListener, OnSafeZonesLoadedListener, GoogleMap.OnMapLongClickListener {
 
     public static final String TAG = "FLL-TS";
+
+    public static final boolean isDevelopment = true; // Change to false before release
 
     private GoogleMap mMap;
 
@@ -118,7 +121,14 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
     public boolean onCreateOptionsMenu(Menu menu) {
 
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.map_dev, menu);
+        inflater.inflate(R.menu.map, menu);
+
+        if (isDevelopment) {
+            // Combine the real and dev menu into one menu
+            SubMenu dev = menu.addSubMenu("Dev");
+
+            inflater.inflate(R.menu.map_dev, dev);
+        }
 
         return true;
     }
@@ -128,6 +138,8 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
 
         int id = item.getItemId();
         switch (id){
+
+            /*** DEV MENU ***/
             case R.id.menu_dev_empty_table:
                 this.sqlAsync.emptyTable();
                 break;
@@ -148,6 +160,10 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
                 this.sqlAsync.clearNotUserCreated();
                 break;
 
+            /*** MENU ***/
+            case R.id.menu_map_view_custom_sz:
+                this.sqlAsync.loadCustomSafeZones();
+                break;
 
 
         }

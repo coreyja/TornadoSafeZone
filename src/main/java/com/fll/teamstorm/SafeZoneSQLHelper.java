@@ -241,6 +241,23 @@ public class SafeZoneSQLHelper extends SQLiteOpenHelper {
         return list;
     }
 
+    public ArrayList<SafeZone> getCustomSafeZones() {
+        ArrayList<SafeZone> list = new ArrayList<SafeZone>();
+
+        String clause = KEY_USERCREATED + "=?";
+        String args[] = {Integer.toString(1)};
+
+        Cursor c = db.query(true, TABLE_NAME, PROJECTION, clause, args,null,null,null,null);
+
+        if(c!=null && c.moveToFirst()){
+            do {
+                list.add(getSafeZoneFromCursor(c));
+            } while (c.moveToNext());
+        }
+
+        return list;
+    }
+
     public void clearUserCreated() {
         String clause = KEY_USERCREATED + "=?";
         String args[] = {Integer.toString(1)};
