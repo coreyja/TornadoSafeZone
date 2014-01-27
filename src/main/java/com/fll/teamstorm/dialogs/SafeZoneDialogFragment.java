@@ -35,6 +35,7 @@ public class SafeZoneDialogFragment extends DialogFragment implements DialogInte
         super();
 
         this.sz = new SafeZone();
+        this.sz.setIsUserCreated(true); // We are creating a new SafeZone so it must be user created
     }
 
     public SafeZoneDialogFragment(LatLng latLng){
@@ -79,8 +80,6 @@ public class SafeZoneDialogFragment extends DialogFragment implements DialogInte
 
         sz.setLocation(loc);
 
-        // Set the SafeZone as user created
-        sz.setIsUserCreated(true);
     }
 
 
