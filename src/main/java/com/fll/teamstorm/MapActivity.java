@@ -25,6 +25,7 @@ import com.appspot.perfect_atrium_421.safezones.model.GeoPtMessage;
 import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
 import com.appspot.perfect_atrium_421.safezones.model.SafeZoneCollection;
 import com.fll.teamstorm.SQL.SafeZoneSQLAsync;
+import com.fll.teamstorm.dialogs.AddressDialog;
 import com.fll.teamstorm.dialogs.SafeZoneDialogFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -169,6 +170,9 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
                 startActivity(i);
                 break;
 
+            case R.id.menu_new_safe_zone:
+                new AddressDialog().show(getFragmentManager(), AddressDialog.TAG);
+                break;
 
         }
 

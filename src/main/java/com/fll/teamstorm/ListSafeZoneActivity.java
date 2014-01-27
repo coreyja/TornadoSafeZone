@@ -20,19 +20,17 @@ import android.widget.ListView;
 
 import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
 import com.fll.teamstorm.SQL.SafeZoneSQLAsync;
+import com.fll.teamstorm.dialogs.AddressDialog;
 import com.fll.teamstorm.dialogs.SafeZoneDialogFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListSafeZoneActivity extends ListActivity implements SafeZonesLoadedListener, SafeZoneDialogFragment.HasSQLAsync, AdapterView.OnItemLongClickListener,
-        AddressToLatLngHelper.OnLatLngFound {
+public class ListSafeZoneActivity extends ListActivity implements SafeZonesLoadedListener, SafeZoneDialogFragment.HasSQLAsync, AdapterView.OnItemLongClickListener {
 
     private SafeZoneSQLAsync sqlAsync;
     private List<SafeZone> safezones = new ArrayList<SafeZone>(); // Init it to an empty list
-
-    private AddressToLatLngHelper addressHelper;
 
     private SafeZoneArrayAdapter adapter;
 
@@ -49,9 +47,6 @@ public class ListSafeZoneActivity extends ListActivity implements SafeZonesLoade
         // Set up the adapter
         this.adapter = new SafeZoneArrayAdapter(this, R.layout.list_item_safe_zone, safezones);
         setListAdapter(this.adapter);
-
-        // Set up addressHelper
-        this.addressHelper = new AddressToLatLngHelper(this);
 
         // Set up checkboxes
         this.showLocal = (CheckBox) findViewById(R.id.list_show_local);
@@ -174,10 +169,7 @@ public class ListSafeZoneActivity extends ListActivity implements SafeZonesLoade
         return true;
     }
 
-    @Override
-    public void OnLatLngFound(LatLng coords) {
-        new SafeZoneDialogFragment(coords).show(getFragmentManager(), SafeZoneDialogFragment.TAG);
-    }
+
 
     private class DeleteSafeZoneDialog extends DialogFragment {
 
@@ -228,39 +220,5 @@ public class ListSafeZoneActivity extends ListActivity implements SafeZonesLoade
 
     }
 
-    private class AddressDialog extends DialogFragment {
 
-        public static final String TAG = "FLL-TS-DIALOG-ADDRESS";
-
-        private EditText address_field;
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-            // Inflate the layout and add it to the dialog
-            LayoutInflater inflater = getActivity().getLayoutInflater();
-            View v = inflater.inflate(R.layout.dialog_address, null);
-            builder.setView(v);
-
-            // Store the address_field
-            address_field = (EditText) v.findViewById(R.id.dialog_address_address);
-
-            builder.setTitle(getString(R.string.dialog_address_title));
-
-            builder.setPositiveButton(getString(R.string.dialog_address_positive), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    String addr = address_field.getText().toString();
-
-                    addressHelper.convertAddressToLatLng(addr);
-                }
-            });
-
-            // If cancel is selected a callback isn't needed as we just close the dialog.
-            builder.setNeutralButton(R.string.string_cancel, null);
-
-            return builder.create();
-        }
-    }
 }

@@ -9,4 +9,9 @@
         android:orderInCategory="100"
         android:showAsAction="never" />
 
+    <item android:id="@+id/menu_new_safe_zone"
+        android:title="@string/menu_list_new_safe_zone"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+
 </menu>
