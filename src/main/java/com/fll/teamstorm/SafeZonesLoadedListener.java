@@ -7,7 +7,9 @@ import java.util.List;
 /**
  * Created by coreyja on 1/14/14.
  */
-public interface OnSafeZonesLoadedListener {
+public interface SafeZonesLoadedListener {
 
     public void onSafeZonesLoaded(List<SafeZone> zones);
+
+    public void loadSafeZones();
 }

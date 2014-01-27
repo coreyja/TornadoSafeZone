@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
 import com.fll.teamstorm.MapActivity;
-import com.fll.teamstorm.OnSafeZonesLoadedListener;
+import com.fll.teamstorm.SafeZonesLoadedListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,16 +21,16 @@ import java.util.List;
  */
 public class SafeZoneSQLAsync {
 
-    private OnSafeZonesLoadedListener safeZonesLoadedListener;
+    private SafeZonesLoadedListener safeZonesLoadedListener;
 
     private SafeZoneSQLHelper sqlHelper;
 
     public SafeZoneSQLAsync(MapActivity mapActivity){
         this(mapActivity, mapActivity);
-        // If the constructor is given a MapActivity use it as the context and the OnSafeZonesLoadedListener
+        // If the constructor is given a MapActivity use it as the context and the SafeZonesLoadedListener
     }
 
-    public SafeZoneSQLAsync(Context context, OnSafeZonesLoadedListener safeZonesLoadedListener) {
+    public SafeZoneSQLAsync(Context context, SafeZonesLoadedListener safeZonesLoadedListener) {
         this.safeZonesLoadedListener = safeZonesLoadedListener;
 
         this.sqlHelper = new SafeZoneSQLHelper(context);
@@ -130,12 +130,7 @@ public class SafeZoneSQLAsync {
 
                 // Conditionally load from SQLite if we are supposed to
                 if (loadFromSQLiteAfterSave) {
-                    if (SafeZoneSQLAsync.this.safeZonesLoadedListener instanceof MapActivity){
-                        SafeZoneSQLAsync.this.loadSafeZones();
-                    } else {
-                        SafeZoneSQLAsync.this.loadCustomSafeZones();
-                    }
-
+                    SafeZoneSQLAsync.this.safeZonesLoadedListener.loadSafeZones();
                 }
             }
 
@@ -248,12 +243,8 @@ public class SafeZoneSQLAsync {
 
             }
 
-            // Load all the Custom SafeZones so that the zones update after the edit.
-            if (SafeZoneSQLAsync.this.safeZonesLoadedListener instanceof MapActivity){
-                SafeZoneSQLAsync.this.loadSafeZones();
-            } else {
-                SafeZoneSQLAsync.this.loadCustomSafeZones();
-            }
+            // Load all the SafeZones so that the zones update after the edit.
+            SafeZoneSQLAsync.this.safeZonesLoadedListener.loadSafeZones();
 
             return null;
         }
@@ -274,12 +265,8 @@ public class SafeZoneSQLAsync {
 
             }
 
-            // Load all the Custom SafeZones so that the zones update after the delete
-            if (SafeZoneSQLAsync.this.safeZonesLoadedListener instanceof MapActivity){
-                SafeZoneSQLAsync.this.loadSafeZones();
-            } else {
-                SafeZoneSQLAsync.this.loadCustomSafeZones();
-            }
+            // Load all the SafeZones so that the zones update after the delete
+            SafeZoneSQLAsync.this.safeZonesLoadedListener.loadSafeZones();
 
             return null;
         }

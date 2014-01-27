@@ -42,7 +42,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter, GooglePlayServicesClient.ConnectionCallbacks,
-        GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.OnInfoWindowClickListener, OnSafeZonesLoadedListener, GoogleMap.OnMapLongClickListener,
+        GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.OnInfoWindowClickListener, SafeZonesLoadedListener, GoogleMap.OnMapLongClickListener,
         SafeZoneDialogFragment.HasSQLAsync{
 
     public static final String TAG = "FLL-TS";
@@ -335,7 +335,7 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
     }
 
 
-    /********* OnSafeZonesLoadedListener *********/
+    /********* SafeZonesLoadedListener *********/
 
     @Override
     public void onSafeZonesLoaded(List<SafeZone> zones){
@@ -344,6 +344,12 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
 
         // Refresh the markers on the map
         this.refreshMarkers();
+    }
+
+    @Override
+    public void loadSafeZones(){
+        // Load all the SafeZones since we are on the Map.
+        this.sqlAsync.loadSafeZones();
     }
 
     /********* OnMapLongClickListener *********/

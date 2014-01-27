@@ -25,7 +25,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListCustomSafeZoneActivity extends ListActivity implements OnSafeZonesLoadedListener, SafeZoneDialogFragment.HasSQLAsync, AdapterView.OnItemLongClickListener,
+public class ListCustomSafeZoneActivity extends ListActivity implements SafeZonesLoadedListener, SafeZoneDialogFragment.HasSQLAsync, AdapterView.OnItemLongClickListener,
         AddressToLatLngHelper.OnLatLngFound {
 
     private SafeZoneSQLAsync sqlAsync;
@@ -111,6 +111,12 @@ public class ListCustomSafeZoneActivity extends ListActivity implements OnSafeZo
 
         Log.i(MapActivity.TAG, String.format("%d SafeZones loaded by ListCustomSZ Activity", this.adapter.getCount()));
 
+    }
+
+    @Override
+    public void loadSafeZones(){
+        // Load all the SafeZones since we are on the Map.
+        this.sqlAsync.loadCustomSafeZones();
     }
 
     @Override
