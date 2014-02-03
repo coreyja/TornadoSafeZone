@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
@@ -58,7 +59,11 @@ public class SafeZoneArrayAdapter extends ArrayAdapter<SafeZone> {
         SafeZone sz = this.getItem(position);
 
         ((TextView) convertView.findViewById(R.id.list_item_title)).setText(sz.getTitle());
-        ((TextView) convertView.findViewById(R.id.list_item_phone)).setText(sz.getPhone());
+        ((TextView) convertView.findViewById(R.id.list_item_phone)).setText(Utils.formatPhoneNumber(sz.getPhone()));
+
+        ImageView img = (ImageView) convertView.findViewById(R.id.list_item_pin);
+
+        img.setImageResource(sz.getMapPinDrawableID());
 
         // Calculate and display the current distance from this SafeZone
         Location loc = this.locationClient.getLastLocation();

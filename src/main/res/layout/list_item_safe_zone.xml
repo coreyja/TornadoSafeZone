@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="15dp" >
 
 
     <TextView
@@ -11,22 +12,35 @@
         android:layout_height="wrap_content"
         android:text="SafeZone Name"
         android:id="@+id/list_item_title"
-        android:layout_margin="10dp"
-        android:textSize="24sp" />
+        android:textSize="20sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SafeZone Phone Number"
+        android:text="SafeZone Phone"
         android:id="@+id/list_item_phone"
-        android:layout_margin="10dp" />
+        android:layout_below="@id/list_item_title" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/list_item_pin"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/pin_red"
+        android:adjustViewBounds="true"
+        android:maxHeight="50dp"
+        android:maxWidth="50dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="SafeZone distance"
         android:id="@+id/list_item_dist"
-        android:layout_margin="10dp"
-        android:textSize="12sp"/>
+        android:layout_toLeftOf="@id/list_item_pin"
+        android:layout_centerVertical="true" />
 
-</LinearLayout>
+
+
+
+</RelativeLayout>

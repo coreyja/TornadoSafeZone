@@ -18,9 +18,11 @@
 
 package com.appspot.perfect_atrium_421.safezones.model;
 
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import com.fll.teamstorm.MapActivity;
+import com.fll.teamstorm.R;
 import com.fll.teamstorm.Utils;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -365,4 +367,25 @@ public final class SafeZone extends com.google.api.client.json.GenericJson {
 
         return hue;
     }
+
+    public int getMapPinDrawableID() {
+
+        int id = R.drawable.pin_green;
+
+        if (this.hasOccupancy() && this.hasMaxOccupancy()){
+            double percentFull = this.getPercentFull();
+
+            if (percentFull > 0.75) {
+                id = R.drawable.pin_yellow;
+            }
+            if (percentFull > 0.90) {
+                id = R.drawable.pin_red;
+            }
+        }
+
+        return id;
+
+    }
+
+
 }
