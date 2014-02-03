@@ -18,6 +18,7 @@ import com.appspot.perfect_atrium_421.safezones.model.Hours;
 import com.appspot.perfect_atrium_421.safezones.model.SafeZone;
 import com.fll.teamstorm.R;
 import com.fll.teamstorm.SQL.SafeZoneSQLAsync;
+import com.fll.teamstorm.Utils;
 
 import java.util.Calendar;
 
@@ -157,26 +158,26 @@ public class HoursDialog extends DialogFragment implements DialogInterface.OnCli
     private void loadHoursFromObject() {
         if (this.hours == null) return;
 
-        this.mondayOpen.setText(this.hours.getMonOpen());
-        this.mondayClose.setText(this.hours.getMonClose());
+        this.mondayOpen.setText(Utils.formatTimeString(this.hours.getMonOpen()));
+        this.mondayClose.setText(Utils.formatTimeString(this.hours.getMonClose()));
 
-        this.tuesdayOpen.setText(this.hours.getTueOpen());
-        this.tuesdayClose.setText(this.hours.getTueClose());
+        this.tuesdayOpen.setText(Utils.formatTimeString(this.hours.getTueOpen()));
+        this.tuesdayClose.setText(Utils.formatTimeString(this.hours.getTueClose()));
 
-        this.wednesdayOpen.setText(this.hours.getWedOpen());
-        this.wednesdayClose.setText(this.hours.getWedClose());
+        this.wednesdayOpen.setText(Utils.formatTimeString(this.hours.getWedOpen()));
+        this.wednesdayClose.setText(Utils.formatTimeString(this.hours.getWedClose()));
 
-        this.thursdayOpen.setText(this.hours.getThursOpen());
-        this.thursdayClose.setText(this.hours.getThursClose());
+        this.thursdayOpen.setText(Utils.formatTimeString(this.hours.getThursOpen()));
+        this.thursdayClose.setText(Utils.formatTimeString(this.hours.getThursClose()));
 
-        this.fridayOpen.setText(this.hours.getFriOpen());
-        this.fridayClose.setText(this.hours.getFriClose());
+        this.fridayOpen.setText(Utils.formatTimeString(this.hours.getFriOpen()));
+        this.fridayClose.setText(Utils.formatTimeString(this.hours.getFriClose()));
 
-        this.saturdayOpen.setText(this.hours.getSatOpen());
-        this.saturdayClose.setText(this.hours.getSatClose());
+        this.saturdayOpen.setText(Utils.formatTimeString(this.hours.getSatOpen()));
+        this.saturdayClose.setText(Utils.formatTimeString(this.hours.getSatClose()));
 
-        this.sundayOpen.setText(this.hours.getSunOpen());
-        this.sundayClose.setText(this.hours.getSunClose());
+        this.sundayOpen.setText(Utils.formatTimeString(this.hours.getSunOpen()));
+        this.sundayClose.setText(Utils.formatTimeString(this.hours.getSunClose()));
     }
 
     @Override
@@ -200,16 +201,45 @@ public class HoursDialog extends DialogFragment implements DialogInterface.OnCli
 
         private TextView field;
 
+
         public TimePickerFragment(TextView field){
             this.field = field;
+
+
         }
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
+
             // Use the current time as the default values for the picker
             final Calendar c = Calendar.getInstance();
             int hour = c.get(Calendar.HOUR_OF_DAY);
             int minute = c.get(Calendar.MINUTE);
+
+            try {
+                // If there was text in the field, use it as the Time
+                String oldTime = field.getText().toString();
+                if (oldTime != null || oldTime.length() != 0) {
+                    String parts[] = oldTime.split(" ");
+
+                    if (parts.length != 2) throw new Exception();
+
+                    String timeParts[] = parts[0].split(":");
+
+                    if (timeParts.length != 2) throw new Exception();
+
+                    hour = Integer.parseInt(timeParts[0]);
+                    minute = Integer.parseInt(timeParts[1]);
+
+                    // If the time is PM add 12 hours to the hour value
+                    if (oldTime.trim().endsWith("PM")) {
+                        hour += 12;
+                    }
+                }
+
+            } catch (Exception e){
+                // Something went wrong. Just use the default values
+            }
 
             // Create a new instance of TimePickerDialog and return it
             return new TimePickerDialog(getActivity(), this, hour, minute, DateFormat.is24HourFormat(getActivity()));
@@ -218,7 +248,7 @@ public class HoursDialog extends DialogFragment implements DialogInterface.OnCli
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             String time = String.format("%02d:%02d:%02d", hourOfDay, minute, 0);
 
-            field.setText(time);
+            field.setText(Utils.formatTimeString(time));
         }
     }
 }
