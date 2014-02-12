@@ -307,6 +307,10 @@ public class MapActivity extends Activity implements GoogleMap.InfoWindowAdapter
             // Get the location
             Location loc = this.mLocationClient.getLastLocation();
 
+            if (loc == null) {
+                return;
+            }
+
             // Create the CameraPosition object with the current location and default zoom
             CameraPosition camPos = new CameraPosition.Builder().target(new LatLng(loc.getLatitude(), loc.getLongitude())).zoom(getResources().getInteger(R.integer.default_zoom_level)).build();
             this.mMap.animateCamera(CameraUpdateFactory.newCameraPosition(camPos));

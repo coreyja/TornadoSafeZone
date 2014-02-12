@@ -25,6 +25,10 @@ public class Utils {
     // Assumes the String is in the format returned by Endpoints
     public static String formatTimeString(String orig){
 
+        if (orig == null) {
+            return "";
+        }
+
         String[] parts = orig.split(":");
 
         // If there are not 3 parts, it's not formatted like expected so just return the orig
